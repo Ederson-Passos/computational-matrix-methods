@@ -1,0 +1,12 @@
+[project]
+name = "computational-matrix-methods"
+version = "0.1.0"
+description = "Implementatio of computational matrix methods."
+authors = [
+    {name = "Ederson Passos Silva", email = "ederson.minimus@gmail.com"},
+]
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib"
+]
