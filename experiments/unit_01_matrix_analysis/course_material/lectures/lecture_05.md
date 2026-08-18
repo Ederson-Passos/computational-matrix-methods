@@ -38,4 +38,8 @@ $$ A_{k} = U_{k} \Sigma_{k} V_{k}^T $$
 
 ## Orthogonal Projection and Distance between subspaces
 
-* 
+* The orthogonal projection of a vector $ y $ onto a subspace $ \mathcal{V} $ spanned by an orthonormal basis $ \{v_1, v_2, ..., v_k\} $ is given by:
+
+$$ P_{V} y = \sum_{i=1}^{k} \langle y, v_i \rangle v_i $$
+
+where $ \langle y, v_i \rangle = y^T v_i $ is the inner product (dot product) of vectors $ y $ and $ v_i $.
