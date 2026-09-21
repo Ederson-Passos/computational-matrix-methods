@@ -4,14 +4,13 @@
     and a steady-state heat conduction problem. First, a symmetric matrix $A$
     is generated and verified to be symmetric positive definite (SPD). Its
     Cholesky factorization is computed, and its condition number is evaluated
-    as $\kappa_2(A) \approx 29.23$. Second, a one-dimensional heat conduction
+    as $\kappa_2(A) \approx 38.34$. Second, a one-dimensional heat conduction
     problem is solved using a prescribed finite difference formulation. The
     prescribed linear system is found to be algebraically solvable but
     mathematically inconsistent with the stated continuous PDE. A corrected
-    finite difference formulation is proposed, which significantly reduces the
-    numerical error and exhibits observed first-order convergence, consistent
-    with the first-order approximation used for the Neumann boundary condition.
-    All problem-specific data are generated deterministically from the
+    finite difference formulation is proposed for the generated Dirichlet-Dirichlet
+    boundary conditions. The corrected formulation reproduces the exact analytical
+    solution at the grid points to machine precision, because the centered finite-difference operator is exact for quadratic solutions in exact arithmetic. All problem-specific data are generated deterministically from the
     student's enrollment number.
 
 \end{abstract}

@@ -25,7 +25,7 @@ def gerar_vetor(matricula, n=10):
     np.random.seed(matricula + 1)
     return np.random.randint(-20, 21, size=n)
 
-matricula = 31837  # student's enrollment number
+matricula = 318375  # student's enrollment number
 
 A = gerar_matriz(matricula)
 b = gerar_vetor(matricula)
@@ -88,7 +88,7 @@ def gerar_matriz_por_matricula(matricula, n=11):
     return M, s, k, fonte, tipo_bc
 
 
-matricula = 31837  # student's enrollment number
+matricula = 318375  # student's enrollment number
 
 M, s, k, fonte, bc = gerar_matriz_por_matricula(matricula)
 

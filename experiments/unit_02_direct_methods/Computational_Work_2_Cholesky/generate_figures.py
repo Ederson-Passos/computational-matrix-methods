@@ -88,7 +88,7 @@ ax.text(1.0, -0.2, "$x=1$", ha='center', va='center', fontsize=11)
 
 # BC Left
 ax.plot([0, 0], [0, 1], color='blue', linewidth=3)
-ax.text(-0.05, 0.5, "$T'(0)=0$\n(Insulated)", ha='right', va='center', fontsize=11, color='blue')
+ax.text(-0.05, 0.5, "$T(0)=0$\n(Prescribed temperature)", ha='right', va='center', fontsize=11, color='blue')
 
 # BC Right
 ax.plot([1, 1], [0, 1], color='green', linewidth=3)
@@ -101,7 +101,7 @@ plt.close(fig)
 # --- Figure 3: Temperature Comparison ---
 x_grid = np.linspace(0, 1, 11)
 x_dense = np.linspace(0, 1, 500)
-T_exact_dense = (comp['parameters']['f'] / (2 * comp['parameters']['k'])) * (1 - x_dense**2)
+T_exact_dense = (comp['parameters']['f'] / (2 * comp['parameters']['k'])) * x_dense * (1 - x_dense)
 T_orig = comp['original']['T']
 T_corr = comp['corrected']['T']
 
@@ -138,13 +138,12 @@ for N, h in zip(Ns, hs):
         MM[i, i] = 2 * cc
         MM[i, i+1] = -cc
         ss[i] = f / k
-    MM[0, 0] = -1/h
-    MM[0, 1] = 1/h
+    MM[0, 0] = 1
     ss[0] = 0
     MM[-1, -1] = 1
     ss[-1] = 0
     TT = np.linalg.solve(MM, ss)
-    TT_ex = (f / (2*k)) * (1 - xx**2)
+    TT_ex = (f / (2*k)) * xx * (1 - xx)
     err = np.abs(TT - TT_ex)
     errors_Linf.append(np.max(err))
     errors_L2.append(np.linalg.norm(err)*np.sqrt(h))

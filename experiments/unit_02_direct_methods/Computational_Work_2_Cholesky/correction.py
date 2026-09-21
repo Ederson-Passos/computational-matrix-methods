@@ -7,7 +7,7 @@ os.makedirs('results', exist_ok=True)
 os.makedirs('notebooks', exist_ok=True)
 os.makedirs('figures', exist_ok=True)
 
-matricula = 31837
+matricula = 318375
 
 # --- 1. ORIGINAL FORMULATION ---
 def gerar_matriz_por_matricula(matricula, n=11):
@@ -64,9 +64,8 @@ for i in range(1, 10):
     M_corr[i, i+1] = -coef
     s_corr[i] = f / k
 
-# BC x=0: -T_0 + T_1 = 0 (first order forward diff divided by h for scaling)
-M_corr[0, 0] = -1/h
-M_corr[0, 1] = 1/h
+# BC x=0: T_0 = 0
+M_corr[0, 0] = 1
 s_corr[0] = 0
 
 # BC x=1: T_10 = 0
@@ -79,7 +78,7 @@ rel_r_corr = r_corr / np.linalg.norm(s_corr) if np.linalg.norm(s_corr) > 0 else 
 
 # --- 3. EXACT SOLUTION ---
 x_grid = np.linspace(0, 1, 11)
-T_exact = (f / (2*k)) * (1 - x_grid**2)
+T_exact = (f / (2*k)) * x_grid * (1 - x_grid)
 
 # --- 4. ERROR ANALYSIS ---
 err_orig = np.abs(T_orig - T_exact)
@@ -106,13 +105,12 @@ def solve_corrected(N):
         MM[i, i] = 2 * cc
         MM[i, i+1] = -cc
         ss[i] = f / k
-    MM[0, 0] = -1/hh
-    MM[0, 1] = 1/hh
+    MM[0, 0] = 1
     ss[0] = 0
     MM[-1, -1] = 1
     ss[-1] = 0
     TT = np.linalg.solve(MM, ss)
-    TT_ex = (f / (2*k)) * (1 - xx**2)
+    TT_ex = (f / (2*k)) * xx * (1 - xx)
     err = np.abs(TT - TT_ex)
     return np.max(err), np.linalg.norm(err)*np.sqrt(hh) 
 
@@ -125,8 +123,12 @@ for N in Ns:
     errors_max.append(emax)
     errors_L2.append(el2)
 
-rate_max = np.polyfit(np.log(hs), np.log(errors_max), 1)[0]
-rate_L2 = np.polyfit(np.log(hs), np.log(errors_L2), 1)[0]
+if max(errors_max) < 1e-12:
+    rate_max = 0.0
+    rate_L2 = 0.0
+else:
+    rate_max = np.polyfit(np.log(hs), np.log(errors_max), 1)[0]
+    rate_L2 = np.polyfit(np.log(hs), np.log(errors_L2), 1)[0]
 
 # --- 6. PLOTS ---
 plt.figure(figsize=(10,6))
@@ -227,7 +229,7 @@ nb = {
    "metadata": {},
    "outputs": [],
    "source": [
-    "T_exact = (f / (2*k)) * (1 - x**2)"
+    "T_exact = (f / (2*k)) * x * (1 - x)"
    ]
   },
   {
@@ -251,8 +253,7 @@ nb = {
     "    M_corr[i, i] = 2*coef\n",
     "    M_corr[i, i+1] = -coef\n",
     "    s_corr[i] = f / k\n",
-    "M_corr[0, 0] = -1/h\n",
-    "M_corr[0, 1] = 1/h\n",
+    "M_corr[0, 0] = 1\n",
     "s_corr[0] = 0\n",
     "M_corr[-1, -1] = 1\n",
     "s_corr[-1] = 0\n",

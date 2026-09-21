@@ -31,22 +31,22 @@ The numerical computation of the lower triangular Cholesky factor $G$ yields:
             \end{pmatrix}$%
     }
 \end{equation}
-To verify the factorization, the reconstruction residual was calculated as $\|A - G G^T\|_2 \approx 1.096 \times 10^{-14}$, confirming reconstruction to near machine precision.
+To verify the factorization, the reconstruction residual was calculated as $\|A - G G^T\|_2 \approx 2.001 \times 10^{-14}$, confirming reconstruction to near machine precision.
 
-Since $A$ is SPD, the $2$-norm condition number can be computed as $\kappa_2(A) = \lambda_{\max}(A) / \lambda_{\min}(A)$. Using the actual computed matrix, the extreme eigenvalues are approximately $\lambda_{\min} = 10.008436$ and $\lambda_{\max} = 292.550973$, and therefore $\kappa_2(A) = 29.230438$ \cite{golub2013matrix}.
+Since $A$ is SPD, the $2$-norm condition number can be computed as $\kappa_2(A) = \lambda_{\max}(A) / \lambda_{\min}(A)$. Using the actual computed matrix, the extreme eigenvalues are approximately $\lambda_{\min} = 10.1083$ and $\lambda_{\max} = 387.5890$, and therefore $\kappa_2(A) = 38.3435$ \cite{golub2013matrix}.
 Using the factor $G$, the linear system $Ax = b$ was solved via forward and backward substitution. The computed solution vector is:
 \begin{equation}
     \resizebox{0.95\textwidth}{!}{%
-        $x = \begin{pmatrix} -0.3351 & 0.1371 & -0.2335 & -0.7980 & -0.1570 & -0.5325 & 0.2272 & -0.0749 & 0.2875 & -0.2869 \end{pmatrix}^T.$%
+        $x = \begin{pmatrix} -0.2703 & 0.3296 & 0.1891 & 0.6653 & 0.1022 & 0.5456 & -0.1468 & -0.1706 & -0.1793 & -0.6184 \end{pmatrix}^T.$%
     }
 \end{equation}
-The algebraic accuracy of this solution is verified by the residual norm $\|Ax - b\|_2 \approx 2.1168 \times 10^{-14}$.
+The algebraic accuracy of this solution is verified by the residual norm $\|Ax - b\|_2 \approx 9.0686 \times 10^{-15}$.
 
 \subsection{Problem 2: Original Finite-Difference Formulation}
 
-The original discrete problem was executed exactly as prescribed by Code 2 using the seed $31837$. This generated the parameters $k = 0.2567$, $f = 1.9530$, grid spacing $h=0.1$, and selected the Neumann--Dirichlet boundary condition corresponding to $T'(0) = 0$ and $T(1) = 0$.
+The original discrete problem was executed exactly as prescribed by Code 2 using the seed $318375$. This generated the parameters $k = 0.0847$, $f = 0.6000$, grid spacing $h=0.1$, and selected the Dirichlet--Dirichlet boundary condition corresponding to $T(0) = 0$ and $T(1) = 0$.
 
-The resulting linear system $M_{orig} T_{orig} = s_{orig}$ was solved computationally. The numerical residual is $\|M_{orig} T_{orig} - s_{orig}\|_2 \approx 1.8253 \times 10^{-15}$. This negligible residual verifies that the generated discrete linear system is algebraically solvable and was solved accurately from a strict algebraic perspective. However, this algebraic residual is fundamentally distinct from and does not imply consistency with the stated continuous PDE.
+The resulting linear system $M_{orig} T_{orig} = s_{orig}$ was solved computationally. The numerical residual is $\|M_{orig} T_{orig} - s_{orig}\|_2 \approx 2.9899 \times 10^{-16}$. The computed solution satisfies the generated discrete linear system to near machine precision. However, this algebraic residual is fundamentally distinct from and does not imply consistency with the stated continuous PDE.
 
 The assignment mathematically defines the steady-state heat equation as:
 \begin{equation}
@@ -57,23 +57,22 @@ The physical configuration of this boundary-value problem is illustrated in \aut
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/problem2_physical_configuration.pdf}
-    \caption{One-dimensional steady-state heat-conduction configuration for the generated Neumann--Dirichlet boundary conditions.}
+    \caption{One-dimensional steady-state heat-conduction configuration for the generated Dirichlet--Dirichlet boundary conditions.}
     \label{fig:problem2-physical-configuration}
 \end{figure}
 
-Subject to the Neumann--Dirichlet boundary conditions, the exact analytical solution can be derived by integrating the constant source term twice:
+Subject to the Dirichlet--Dirichlet boundary conditions, the exact analytical solution can be derived by integrating the constant source term twice:
 \begin{equation} \label{eq:exact-solution}
-    T_{exact}(x) = \frac{f}{2k} (1 - x^2).
+    T_{exact}(x) = \frac{f}{2k} x (1 - x).
 \end{equation}
-Given $k, f > 0$, the analytical solution has specific qualitative properties: it is non-negative on $[0,1]$, strictly concave downward ($T''(x) = -f/k < 0$), reaches a global maximum at the insulated boundary $x=0$ ($T_{exact}(0) \approx 3.8039$), and monotonically decreases to the fixed temperature at $x=1$.
+Given $k, f > 0$, the analytical solution has specific qualitative properties: it is non-negative on $[0,1]$, strictly concave downward ($T''(x) = -f/k < 0$), reaches a global maximum at the center of the domain $x=0.5$ ($T_{exact}(0.5) \approx 0.8855$), and decreases to the fixed temperature at both boundaries.
 
 A rigorous diagnosis reveals that the prescribed discrete formulation is not consistent with the continuous differential equation stated in the assignment. Specifically:
 \begin{enumerate}
     \item \textbf{Sign inconsistency:} The interior matrix coefficients $(1/h^2, -2/h^2, 1/h^2)$ approximate the positive second derivative $T''_{i}$, omitting the required negative sign in the Laplacian operator.
     \item \textbf{Source scaling inconsistency:} The generated right-hand side is $s_i = (h^2/k) f$, which improperly scales the source by $h^2$. Together with the sign inconsistency, the interior nodes inadvertently model the equation $T'' = \frac{h^2}{k}f$.
-    \item \textbf{Boundary condition inconsistency:} The first row implements $\frac{1}{h^2}(T_1 - T_0) = \frac{h^2}{k}f$. Instead of imposing $T'(0) = 0$, this creates a mesh-dependent Neumann condition proportional to $h^3$.
 \end{enumerate}
-Consequently, at the prescribed grid resolution $h=0.1$, the original formulation produces a qualitatively different temperature profile. As shown in \autoref{tab:temperature-comparison}, its maximum absolute error relative to the analytical solution of the stated continuous problem is approximately $3.8457$. This discrepancy is attributable to the inconsistency of the discrete equations with the stated continuous model, rather than to failure of the linear solver.
+Consequently, at the prescribed grid resolution $h=0.1$, the original formulation produces a qualitatively different temperature profile. As shown in \autoref{tab:temperature-comparison}, its maximum absolute error relative to the analytical solution of the stated continuous problem is approximately $0.8944$. This discrepancy is attributable to the inconsistency of the discrete equations with the stated continuous model, rather than to failure of the linear solver.
 
 \subsection{Problem 2: Corrected Formulation}
 
@@ -81,12 +80,12 @@ To construct a finite-difference system mathematically consistent with $-k T'' =
 \begin{equation}
     -\frac{1}{h^2} T_{i-1} + \frac{2}{h^2} T_{i} - \frac{1}{h^2} T_{i+1} = \frac{f}{k}.
 \end{equation}
-For the Neumann boundary at $x=0$, a first-order forward difference approximation was applied to impose $T'(0) = 0$:
+For the Dirichlet boundaries at $x=0$ and $x=1$, they are strictly enforced via:
 \begin{equation}
-    -\frac{1}{h} T_0 + \frac{1}{h} T_1 = 0.
+    T_0 = 0 \quad \text{and} \quad T_{10} = 0.
 \end{equation}
-This first-order approximation at the boundary limits the global convergence of the corrected scheme to first order, which is sufficient to establish a mathematically consistent discrete representation.
-The Dirichlet boundary at $x=1$ is strictly enforced via $T_{10} = 0$. This corrected linear system, denoted $M_{corr} T_{corr} = s_{corr}$, was solved yielding the corrected numerical solution shown in \autoref{tab:temperature-comparison}.
+This yields a system that is an exact discrete representation of the continuum equation for quadratic solutions.
+This corrected linear system, denoted $M_{corr} T_{corr} = s_{corr}$, was solved yielding the corrected numerical solution shown in \autoref{tab:temperature-comparison}.
 
 \begin{table}[ht]
     \centering
@@ -96,26 +95,26 @@ The Dirichlet boundary at $x=1$ is strictly enforced via $T_{10} = 0$. This corr
         \toprule
         $x$ & $T_{exact}$ & $T_{orig}$ & $T_{corr}$ & $|T_{orig} - T_{exact}|$ & $|T_{corr} - T_{exact}|$ \\
         \midrule
-        0.0 & 3.8039      & -0.0418    & 3.4235     & 3.8457e+00       & 3.8039e-01        \\
-        0.1 & 3.7658      & -0.0411    & 3.4235     & 3.8069e+00       & 3.4235e-01        \\
-        0.2 & 3.6517      & -0.0396    & 3.3474     & 3.6913e+00       & 3.0431e-01        \\
-        0.3 & 3.4615      & -0.0373    & 3.1953     & 3.4988e+00       & 2.6627e-01        \\
-        0.4 & 3.1953      & -0.0342    & 2.9670     & 3.2295e+00       & 2.2823e-01        \\
-        0.5 & 2.8529      & -0.0304    & 2.6627     & 2.8833e+00       & 1.9019e-01        \\
-        0.6 & 2.4345      & -0.0259    & 2.2823     & 2.4603e+00       & 1.5215e-01        \\
-        0.7 & 1.9400      & -0.0205    & 1.8259     & 1.9605e+00       & 1.1412e-01        \\
-        0.8 & 1.3694      & -0.0145    & 1.2933     & 1.3838e+00       & 7.6077e-02        \\
-        0.9 & 0.7227      & -0.0076    & 0.6847     & 7.3034e-01       & 3.8039e-02        \\
-        1.0 & 0.0000      & 0.0000     & 0.0000     & 0.0000e+00       & 0.0000e+00        \\
+        0.0 & 0.0000 & 0.0000 & -0.0000 & 5.7980e-18 & 1.1564e-15 \\
+        0.1 & 0.3188 & -0.0032 & 0.3188 & 3.2198e-01 & 9.9920e-16 \\
+        0.2 & 0.5667 & -0.0057 & 0.5667 & 5.7241e-01 & 8.8818e-16 \\
+        0.3 & 0.7439 & -0.0074 & 0.7439 & 7.5129e-01 & 7.7716e-16 \\
+        0.4 & 0.8501 & -0.0085 & 0.8501 & 8.5862e-01 & 5.5511e-16 \\
+        0.5 & 0.8855 & -0.0089 & 0.8855 & 8.9440e-01 & 4.4409e-16 \\
+        0.6 & 0.8501 & -0.0085 & 0.8501 & 8.5862e-01 & 4.4409e-16 \\
+        0.7 & 0.7439 & -0.0074 & 0.7439 & 7.5129e-01 & 2.2204e-16 \\
+        0.8 & 0.5667 & -0.0057 & 0.5667 & 5.7241e-01 & 1.1102e-16 \\
+        0.9 & 0.3188 & -0.0032 & 0.3188 & 3.2198e-01 & 0.0000e+00 \\
+        1.0 & 0.0000 & 0.0000 & 0.0000 & 0.0000e+00 & 0.0000e+00 \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-In contrast to the original formulation, the corrected numerical solution reaches $T_{corr}(0) \approx 3.4235$. Its maximum absolute error relative to the exact analytical solution drops to approximately $0.3804$. This remaining error is consistent with discretization error introduced by the first-order approximation at the Neumann boundary. The result should therefore be interpreted as an empirical accuracy assessment of the corrected scheme, rather than as evidence of exact agreement at $h=0.1$.
+In contrast to the original formulation, the corrected numerical solution reaches $T_{corr}(0.5) \approx 0.8855$. Its maximum absolute error relative to the exact analytical solution drops to approximately $1.1564 \times 10^{-15}$. In exact arithmetic, the corrected centered finite-difference discretization reproduces the quadratic analytical solution exactly at the grid points; the observed discrepancies are attributable to floating-point roundoff.
 
-\subsection{Comparison and Convergence Analysis}
+\subsection{Comparison and Discretization Accuracy}
 
-\autoref{fig:temperature-comparison} visually emphasizes the qualitative distinction between the formulations. The corrected formulation reproduces the qualitative features of the analytical solution and approaches the analytical profile as the grid is refined. The interior stencil of the original formulation approximates $T''$ with the opposite sign and the source term is improperly scaled by $h^2$.
+\autoref{fig:temperature-comparison} visually emphasizes the qualitative distinction between the formulations. The corrected formulation reproduces the qualitative features of the analytical solution precisely at all grid points. The interior stencil of the original formulation approximates $T''$ with the opposite sign and the source term is improperly scaled by $h^2$.
 
 \begin{figure}[ht]
     \centering
@@ -124,35 +123,28 @@ In contrast to the original formulation, the corrected numerical solution reache
     \label{fig:temperature-comparison}
 \end{figure}
 
-To validate the corrected method, an auxiliary convergence experiment was performed using grid sizes $N \in \{11, 21, 41, 81\}$. As shown in \autoref{tab:convergence}, the error monotonically decreases as $h \to 0$.
+To validate the corrected method, an auxiliary convergence experiment was performed using grid sizes $N \in \{11, 21, 41, 81\}$. As shown in \autoref{tab:convergence}, the error remains at the level of floating-point roundoff across all resolutions.
 
 \begin{table}[ht]
     \centering
-    \caption{Empirical convergence of the corrected finite-difference formulation.}
+    \caption{Empirical verification of the corrected finite-difference formulation. Errors represent floating-point-level discrepancies; no meaningful empirical convergence rate can be inferred.}
     \label{tab:convergence}
     \begin{tabular}{cccc}
         \toprule
         $N$ & $h$    & $L_\infty$ Error & Discrete $L_2$ Error \\
         \midrule
-        11  & 0.1000 & 3.8039e-01       & 2.3602e-01  \\
-        21  & 0.0500 & 1.9019e-01       & 1.1392e-01  \\
-        41  & 0.0250 & 9.5097e-02       & 5.5933e-02  \\
-        81  & 0.0125 & 4.7548e-02       & 2.7709e-02  \\
+        11  & 0.1000 & 1.1564e-15       & 6.7028e-16 \\
+        21  & 0.0500 & 2.3315e-15       & 1.6846e-15 \\
+        41  & 0.0250 & 2.6689e-14       & 1.6860e-14 \\
+        81  & 0.0125 & 1.0254e-13       & 5.5344e-14 \\
         \bottomrule
     \end{tabular}
 \end{table}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.6\textwidth]{figures/problem2_convergence.pdf}
-    \caption{Observed convergence of the corrected formulation under grid refinement; the dashed line denotes a first-order reference slope.}
-    \label{fig:problem2-convergence}
-\end{figure}
-
-The computed convergence rate in the $L_\infty$-norm is approximately $1.00$, and in the $L_2$-norm is approximately $1.03$. The observed first-order convergence is consistent with the first-order forward-difference approximation used for the Neumann boundary condition \cite{leveque2007finite}.
+Because the exact solution is quadratic, the centered finite-difference discretization is exact in exact arithmetic; the reported discrepancies therefore reflect floating-point roundoff rather than a measurable asymptotic convergence regime.
 
 \subsection{Physical Interpretation}
 
-The stated steady-state boundary-value problem describes a one-dimensional bar subject to a constant internal heat source $f > 0$. The zero-flux Neumann boundary condition at $x=0$ models a perfectly insulated edge, while the homogeneous Dirichlet boundary condition at $x=1$ fixes the right edge to a baseline reference temperature of zero. Physically, thermal energy is continuously generated inside the domain and is completely blocked from exiting via the left boundary; therefore, all generated heat must flow rightwards to dissipate. This mechanism produces a temperature profile that is concave downward and reaches its maximum at the insulated boundary. The corrected numerical solution reproduces these qualitative features and approaches the analytical profile as the grid is refined.
+The stated steady-state boundary-value problem describes a one-dimensional bar subject to a constant internal heat source $f > 0$. The homogeneous Dirichlet boundary conditions at $x=0$ and $x=1$ fix the edges to a baseline reference temperature of zero. Physically, thermal energy is continuously generated inside the domain and must flow outwards through both boundaries to dissipate. This mechanism produces a symmetric temperature profile that is concave downward and reaches its maximum exactly at the midpoint of the domain. The corrected numerical solution reproduces these qualitative features perfectly, matching the analytical profile at all grid points.
 
-By contrast, the original algorithmic formulation uses a discrete operator with the sign of the positive second derivative, together with the nonstandard source scaling described above. At the prescribed grid, this produces a concave-up profile with temperatures below the reference value imposed at $x=1$. The negative profile is inconsistent with the analytical solution of the stated PDE under the specified parameters and boundary conditions. This behavior is a consequence of the inconsistency between the generated discrete system and the stated differential equation, not evidence of numerical instability in the linear solve.
+By contrast, the original algorithmic formulation uses a discrete operator with the sign of the positive second derivative, together with the nonstandard source scaling described above. At the prescribed grid, this produces a concave-up profile with temperatures below the reference value imposed at the boundaries. The negative profile is inconsistent with the analytical solution of the stated PDE under the specified parameters and boundary conditions. This behavior is a consequence of the inconsistency between the generated discrete system and the stated differential equation, not evidence of numerical instability in the linear solve.

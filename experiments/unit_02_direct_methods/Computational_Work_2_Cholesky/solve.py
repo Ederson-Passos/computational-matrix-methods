@@ -7,7 +7,7 @@ os.makedirs("notebooks", exist_ok=True)
 os.makedirs("results", exist_ok=True)
 os.makedirs("figures", exist_ok=True)
 
-matricula = 31837
+matricula = 318375
 
 # --- Problem 1 ---
 def gerar_matriz(matricula, n=10):
@@ -171,7 +171,7 @@ notebook_dict = {
             "source": [
                 "# Computational Work 2: Results\n",
                 "## 1. REPRODUCIBILITY AND PARAMETERS\n",
-                "- Enrollment number: 0031837 (integer seed 31837)\n",
+                "- Enrollment number: 00318375 (integer seed 318375)\n",
                 "- Double precision is used automatically by NumPy."
             ]
         },
@@ -186,7 +186,7 @@ notebook_dict = {
                 "print('Python:', sys.version)\n",
                 "print('NumPy:', np.__version__)\n",
                 "print('Matplotlib:', matplotlib.__version__)\n",
-                "matricula = 31837\n",
+                "matricula = 318375\n",
                 "np.set_printoptions(precision=4, suppress=True, linewidth=120)\n",
                 "print('Seed:', matricula)"
             ]
