@@ -1,0 +1,17 @@
+Computational Work 2 Results
+============================
+Enrollment Number: 31837
+
+Problem 1
+---------
+A is symmetric: True
+A is positive definite: True
+Condition number (2-norm): 29.230438431347462
+Residual norm Ax=b: 2.1167734743366723e-14
+
+Problem 2
+---------
+k = 0.2567109423846127
+source f = 1.9529902534556234
+Boundary condition = neumann-dirichlet
+Residual norm MT=s = 1.8253379971363984e-15
