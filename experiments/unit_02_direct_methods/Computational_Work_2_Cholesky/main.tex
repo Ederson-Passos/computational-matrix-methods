@@ -1,0 +1,76 @@
+% !TEX program = xelatex
+%
+% MAJOR FORMATTING DECISIONS:
+% 1. Engine: XeLaTeX (or LuaLaTeX) is required to use the 'fontspec' package to set the native system font to Times New Roman.
+% 2. Document Class: article, 12pt, a4paper to meet the base requirements.
+% 3. Margins: set explicitly via geometry package (left=2cm, right=2cm, top=2cm, bottom=1.5cm) to meet the professor's strict constraints.
+% 4. Spacing: setspace package used with \onehalfspacing for exactly 1.5 line spacing.
+% 5. Header: custom compact header used instead of \maketitle to save vertical space, ensuring the paper stays within the 10-page limit.
+% 6. Bibliography: biblatex used with numeric style, loading references.bib.
+% 7. Modularity: separate section files are loaded using \input to keep the main file clean.
+
+\documentclass[12pt, a4paper]{article}
+
+% --- Fonts and Encoding ---
+% Requires compilation with XeLaTeX or LuaLaTeX
+\usepackage{fontspec}
+\setmainfont{Times New Roman} % Fallback: If not available, FreeSerif or TeX Gyre Termes could be used, but Times New Roman is the strict requirement.
+
+% --- Page Geometry ---
+\usepackage[left=2cm, right=2cm, top=2cm, bottom=1.5cm]{geometry}
+
+% --- Line Spacing ---
+\usepackage{setspace}
+\onehalfspacing
+
+% --- Mathematical Packages ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+
+% --- Figures and Tables ---
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+
+% --- Bibliography ---
+\usepackage[style=numeric, sorting=none]{biblatex}
+\addbibresource{references.bib}
+
+% --- Hyperlinks ---
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\begin{document}
+
+% --- Compact Header / Title ---
+% Avoiding \maketitle to save space for the 10-page limit
+\begin{center}
+    {\Large \textbf{Computational Work 2: Cholesky Factorization}} \\[0.5em]
+    {\large Éderson Passos Silva \quad Registration: 0031837} \\[0.2em]
+    {\normalsize Course: Computational Matrix Methods} \\
+    {\normalsize Professor: Cibele Aparecida Ladeia}
+\end{center}
+\vspace{1em}
+
+% --- Document Content ---
+\input{sections/00_abstract.tex}
+\input{sections/01_problem.tex}
+\input{sections/02_methodology.tex}
+\input{sections/03_results_discussion.tex}
+
+% --- Bibliography ---
+\printbibliography[heading=bibintoc, title={Referências Bibliográficas}]
+
+% --- Appendix ---
+% The appendix is included here if needed (the Anexo from the assignment)
+\newpage
+\appendix
+\input{sections/04_appendix.tex}
+
+\end{document}
