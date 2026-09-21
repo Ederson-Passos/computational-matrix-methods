@@ -1,0 +1,79 @@
+\section{Problem}
+
+The computational work is divided into two problems involving numerical linear
+algebra and the numerical solution of a steady-state heat conduction problem.
+
+\subsection{Problem 1: Symmetric Positive Definite Matrix}
+
+Let $A \in \mathbb{R}^{10\times10}$ and $b \in \mathbb{R}^{10}$ be generated
+according to the procedure given in Code 1 of Appendix~\ref{app:code1}, using
+the student's enrollment number as the random seed.
+
+The following tasks are considered:
+
+\begin{enumerate}
+    \item Determine whether the matrix $A$ is symmetric positive definite.
+          If so, compute its Cholesky factorization
+          \[
+              A = GG^{T},
+          \]
+          and present the Cholesky factor $G$.
+
+    \item Compute the condition number $\kappa(A)$ and justify the result.
+
+    \item Solve the linear system
+          \[
+              Ax=b.
+          \]
+\end{enumerate}
+
+\subsection{Problem 2: One-Dimensional Steady-State Heat Conduction}
+
+Consider the one-dimensional steady-state heat conduction problem in a unit-length bar,
+
+\begin{equation}
+    -k\frac{d^2T}{dx^2}=f,
+    \qquad 0\leq x\leq1,
+\end{equation}
+
+where $T(x)$ denotes the temperature, $k>0$ is the thermal conductivity,
+and $f$ is a constant source term.
+
+The boundary conditions are determined according to the procedure given in Code 2
+of Appendix~\ref{app:code2}. One of the following cases is selected:
+
+\begin{align*}
+    \text{Case 1:}\quad &
+    \left.\frac{dT}{dx}\right|_{x=0}=0,
+    \qquad T(1)=0,
+    \\[4pt]
+    \text{Case 2:}\quad &
+    T(0)=0,
+    \qquad T(1)=0,
+    \\[4pt]
+    \text{Case 3:}\quad &
+    \left.\frac{dT}{dx}\right|_{x=0}=0,
+    \qquad
+    \left.\frac{dT}{dx}\right|_{x=1}=0.
+\end{align*}
+
+Using the finite difference formulation specified in the assignment, with
+$11$ grid points, the problem is represented by the linear system
+
+\begin{equation}
+    MT=s,
+\end{equation}
+
+where $M$ is the matrix associated with the discretized differential operator,
+$s$ is the source vector including the boundary-condition contributions, and
+$T$ is the vector of unknown temperatures.
+
+The objectives are:
+
+\begin{enumerate}
+    \item Generate $M$ and $s$ using the student's enrollment number and solve
+          the resulting linear system.
+    \item Present the numerical temperature distribution $T(x)$.
+    \item Plot the temperature distribution and interpret the result from a
+          physical perspective.
+\end{enumerate}
