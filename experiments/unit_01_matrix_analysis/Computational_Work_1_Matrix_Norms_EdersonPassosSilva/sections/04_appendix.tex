@@ -1,0 +1,36 @@
+\section{Python code from Question 1-a}\label{app:python-code}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+registration = 318375
+
+# Seed with my number registration
+np.random.seed(registration)
+
+# 1. Generation of random matrix A
+A = np.random.choice([-1, 0, 1], size=(8, 16))
+
+# 2. Manual calculation (via theoretical definitions) for numerical double-checking
+norm_1_manual = np.max(np.sum(np.abs(A), axis=0))
+norm_inf_manual = np.max(np.sum(np.abs(A), axis=1))
+norm_F_manual = np.sqrt(np.sum(A**2))
+
+# Calculation of norm-2 via SVD decomposition (square root of the largest eigenvalue of A^T A),
+# where, ||A||_2 = max singular value
+U, S, Vt = np.linalg.svd(A)
+norm_2_manual = S[0]
+
+# 3. Calculation via standard linear algebra library (Numpy via np.linalg.norm)
+norm_1_lib = np.linalg.norm(A, ord=1)
+norm_2_lib = np.linalg.norm(A, ord=2)
+norm_inf_lib = np.linalg.norm(A, ord=np.inf)
+norm_F_lib = np.linalg.norm(A, ord='fro')
+
+# 4. Strict formatting with 6 significant figures
+print(f"Matrix A Shape: {A.shape}")
+print(f"||A||_1   = {norm_1_lib:.6g}")  # Column Maximum Sum Standard
+print(f"||A||_2   = {norm_2_lib:.6g}")  # Maximum singular value of matrix A, via SVD decomposition
+print(f"||A||_inf = {norm_inf_lib:.6g}")  # Line Maximum Sum Standard
+print(f"||A||_F   = {norm_F_lib:.6g}")  # Frobenius Norm
+\end{lstlisting}

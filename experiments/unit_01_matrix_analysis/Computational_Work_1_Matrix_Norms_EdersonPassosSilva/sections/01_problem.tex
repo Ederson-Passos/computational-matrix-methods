@@ -1,0 +1,15 @@
+\section{Problem}
+
+The computational work proposed in the course is divided into two parts. The first part considers a pseudo-random matrix $A \in \mathbb{R}^{8\times16}$, whose entries are generated from the set $\{-1,0,1\}$. The required tasks are to compute the induced $1$-, $2$-, and $\infty$-norms and the Frobenius norm; establish the relationship between the singular values of $A$ and $2|A|$; determine the full singular value decomposition:
+\[
+A = U\Sigma V^T;
+\]
+evaluate the reconstruction error after forming $A_{\text{recon}} = U\Sigma V^T$; and analyze the spectral and Frobenius norms of the error associated with a rank-$k$ approximation $A_k = U_k\Sigma_k V_k^T$. All numerical results are to be reported with six significant figures.
+
+The second part considers a matrix $A \in \mathbb{R}^{200\times200}$ interpreted as a grayscale mathematical image. The assignment specifies the construction of the image from two spatial components and requires the use of SVD to obtain the singular-value spectrum, analyze its relation to the structure of the image, and construct low-rank approximations for selected values of $k$. The Frobenius reconstruction error must be computed and plotted as a function of $k$, and the value of $k$ producing a visually satisfactory approximation must be identified.
+
+In the computational results adopted in this report, the second experiment uses the generated matrix:
+\[
+A(X,Y) = \sin(aX) + \cos(bY),
+\]
+as documented in Section~\ref{fig:matrix_a}. This formulation is the basis of the numerical values and figures presented in Question~2.

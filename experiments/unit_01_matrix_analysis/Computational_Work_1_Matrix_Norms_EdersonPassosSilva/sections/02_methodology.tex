@@ -1,0 +1,27 @@
+\section{Methodology}
+
+The computations were performed in Python using NumPy for matrix generation, norm evaluation, singular value decomposition, reconstruction, and low-rank approximation. The complete computational implementation is available in the \href{https://github.com/Ederson-Passos/computational-matrix-methods}{GitHub repository associated with this work}, which provides the scripts used to generate the matrices, perform the numerical experiments, and reproduce the reported results. The pseudo-random matrix in Question~1 was generated with the registration number used as the random seed:
+\[
+A = \operatorname{choice}(\{-1,0,1\}, 8\times16).
+\]
+The seed was fixed so that the numerical experiment is reproducible.
+
+For the first experiment, the induced matrix norms were evaluated from their standard definitions. In particular, the $1$-norm was computed as the maximum absolute column sum, the $\infty$-norm as the maximum absolute row sum, and the $2$-norm through the largest singular value. The Frobenius norm was computed from the square root of the sum of the squared entries. The results obtained directly from these definitions were compared with the corresponding values returned by \texttt{numpy.linalg.norm}.
+
+The SVD was computed with the full-matrix option,
+\[
+A = U\Sigma V^T,
+\]
+where $U\in\mathbb{R}^{8\times8}$ and $V\in\mathbb{R}^{16\times16}$ are orthogonal and $\Sigma\in\mathbb{R}^{8\times16}$ contains the singular values. The reconstructed matrix was formed as $A_{\mathrm{recon}}=U\Sigma V^T$, and its discrepancy from the original matrix was measured using both the Frobenius and spectral norms. A rank-$4$ approximation was subsequently obtained from the four largest singular values and corresponding singular vectors. The spectral and Frobenius norms of the resulting residual were then compared with the theoretical properties of the truncated SVD.
+
+For Question~2, a $200\times200$ matrix was generated on a regular grid over $[0,2\pi]\times[0,2\pi]$. In the implementation corresponding to the results reported here, the matrix is
+\[
+A(X,Y) = \sin(aX) + \cos(bY),
+\]
+with the parameters generated from the fixed registration seed. Its SVD was computed and the singular values were examined as a function of their index. Rank-$k$ approximations
+\[
+A_k = U_k\Sigma_k V_k^T
+\]
+were constructed for $k\in\{1,2,5,10,20,50,100\}$. For each selected rank, the Frobenius norm of the residual $A-A_k$ was calculated. The corresponding images were also compared visually to identify the smallest rank that provides a satisfactory reconstruction.
+
+All reported numerical values are given with six significant figures, as required by the assignment. The computational implementation used double-precision floating-point arithmetic through NumPy.

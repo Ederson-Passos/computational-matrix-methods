@@ -1,0 +1,92 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- Encodings and Fonts ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{mathptmx} % Times New Roman equivalent for text and math
+\usepackage{courier} % Fix for missing t1xtt font in MiKTeX
+\usepackage[font=footnotesize, labelfont=bf]{caption}
+
+% --- Page Geometry ---
+% Margins: 2 cm (right and left); 2 cm (top); 1.5 cm (bottom)
+\usepackage[left=2cm, right=2cm, top=2cm, bottom=1.5cm]{geometry}
+
+% --- Line Spacing ---
+\usepackage{setspace}
+\onehalfspacing % 1.5 line spacing
+
+% --- Math and Algorithms ---
+\usepackage{amsmath}
+\usepackage{amssymb} % Required for \mathbb
+\usepackage{bm} % Bold math
+\usepackage{bbm} % Blackboard bold
+
+% --- Graphics and Tables ---
+\usepackage{graphicx}
+\usepackage{booktabs} % Professional tables
+
+\usepackage{float}
+\usepackage{caption}
+
+% --- Code Snippets Formatting ---
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% --- Hyperlinks ---
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
+\begin{document}
+
+% --- Title Page Setup ---
+\begin{center}
+    {\Large \textbf{Computational Work 1: Matrix Norms and SVD}}\\
+    \vspace{0.5cm}
+    {\large \textbf{Éderson Passos Silva}}\\ % UPDATE YOUR NAME AND ID HERE
+    \vspace{0.3cm}
+    {\small Course: Computational Matrix Methods}\\
+    {\small Professor: Cibele Aparecida Ladeia}\\
+    {\small Post-Graduate Program in Applied Mathematics (PPGMAP)}\\
+    \vspace{0.8cm}
+\end{center}
+
+% --- Input Sections ---
+\input{sections/00_abstract}
+\input{sections/01_problem}
+\input{sections/02_methodology}
+\input{sections/03_results_discussion}
+
+% --- References ---
+\bibliographystyle{plain}
+\bibliography{references}
+
+% --- Appendices ---
+\clearpage
+\appendix
+\input{sections/04_appendix}
+
+\end{document}
