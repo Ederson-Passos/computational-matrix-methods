@@ -1,0 +1,95 @@
+\appendix
+
+\section{Generation Codes}
+\label{app:generation-codes}
+
+The following codes reproduce the procedures provided in the assignment for generating the numerical data used in the computational experiments.
+
+\subsection{Code 1: Matrix and Vector Generation}
+\label{app:code1}
+
+\begin{lstlisting}[language=Python, caption={Generation of the matrix $A$ and vector $b$ using the student's enrollment number.}, label={lst:code1}]
+import numpy as np
+
+def gerar_matriz(matricula, n=10):
+    np.random.seed(matricula)
+    B = np.random.randint(-5, 6, size=(n, n))
+    A = B @ B.T + n * np.eye(n)
+    return A
+
+def gerar_vetor(matricula, n=10):
+    np.random.seed(matricula + 1)
+    return np.random.randint(-20, 21, size=n)
+
+matricula = 31837  # student's enrollment number
+
+A = gerar_matriz(matricula)
+b = gerar_vetor(matricula)
+
+print("Matriz A:")
+print(A)
+
+print("\nVetor b:")
+print(b)
+\end{lstlisting}
+
+\subsection{Code 2: Heat Conduction Problem}
+\label{app:code2}
+
+\begin{lstlisting}[language=Python, caption={Generation of the finite difference system for the one-dimensional heat conduction problem.}, label={lst:code2}]
+import numpy as np
+
+def gerar_matriz_por_matricula(matricula, n=11):
+    np.random.seed(matricula)
+
+    h = 1 / (n - 1)
+    M = np.zeros((n, n))
+
+    k = np.random.uniform(0.05, 0.3)
+    fonte = np.random.uniform(0.5, 2.0)
+
+    tipo_bc = np.random.choice([
+        "neumann-dirichlet",
+        "dirichlet-dirichlet",
+        "neumann-neumann"
+    ])
+
+    coef = 1 / h**2
+    s = np.ones(n) * (h**2 / k) * fonte
+
+    for i in range(1, n - 1):
+        M[i, i - 1] = coef
+        M[i, i] = -2 * coef
+        M[i, i + 1] = coef
+
+    if tipo_bc == "neumann-dirichlet":
+        M[0, 0] = -coef
+        M[0, 1] = coef
+        M[-1, -1] = 1
+        s[-1] = 0
+
+    elif tipo_bc == "dirichlet-dirichlet":
+        M[0, 0] = 1
+        M[-1, -1] = 1
+        s[0] = 0
+        s[-1] = 0
+
+    elif tipo_bc == "neumann-neumann":
+        M[0, 0] = -coef
+        M[0, 1] = coef
+        M[-1, -2] = -coef
+        M[-1, -1] = coef
+
+    return M, s, k, fonte, tipo_bc
+
+
+matricula = 31837  # student's enrollment number
+
+M, s, k, fonte, bc = gerar_matriz_por_matricula(matricula)
+
+print("Matriz M:\n", M)
+print("Vetor s:\n", s)
+print("k =", k)
+print("fonte =", fonte)
+print("BC =", bc)
+\end{lstlisting}
