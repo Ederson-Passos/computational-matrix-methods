@@ -1,0 +1,72 @@
+\section{Methodology}
+
+The computational experiments were performed using Python and the NumPy library.
+All problem-specific data were generated deterministically from the student's
+enrollment number, following the algorithms provided in the assignment.
+
+\subsection{Matrix Generation and Cholesky Factorization}
+
+For the first problem, the matrix $A\in\mathbb{R}^{10\times10}$ is generated according to
+
+\begin{equation}
+    A = BB^{T} + 10I,
+\end{equation}
+
+where $B$ is a randomly generated integer matrix and $I$ is the $10\times10$
+identity matrix. The vector $b\in\mathbb{R}^{10}$ is independently generated
+using the prescribed random seed.
+
+The symmetry and positive definiteness of $A$ are verified before computing its
+Cholesky factorization. When $A$ is symmetric positive definite, the
+factorization
+
+\begin{equation}
+    A = GG^{T}
+\end{equation}
+
+is computed, where $G$ is a lower triangular matrix with positive diagonal
+entries.
+
+The condition number of $A$ is then computed to quantify the sensitivity of the
+corresponding linear system to perturbations. Finally, the system
+
+\begin{equation}
+    Ax=b
+\end{equation}
+
+is solved numerically.
+
+\subsection{Heat Conduction Problem}
+
+For the second problem, the parameters $k$, $f$, and the boundary-condition type
+are generated using the prescribed procedure and the enrollment number as the
+random seed. The spatial domain $[0,1]$ is represented by $11$ equally spaced
+grid points, resulting in a grid spacing
+
+\begin{equation}
+    h=\frac{1}{10}.
+\end{equation}
+
+The matrix $M$ and vector $s$ are constructed according to the finite difference
+formulation specified in the assignment. The resulting linear system
+
+\begin{equation}
+    MT=s
+\end{equation}
+
+is then solved numerically to obtain the temperature vector
+
+\begin{equation}
+    T =
+    \begin{bmatrix}
+        T_0 & T_1 & \cdots & T_{10}
+    \end{bmatrix}^{T}.
+\end{equation}
+
+The numerical temperature values are associated with the corresponding spatial
+grid points and plotted as a function of $x$. The resulting temperature
+distribution is subsequently interpreted in terms of the physical behavior of
+the one-dimensional heat conduction problem.
+
+All numerical computations were performed using double-precision floating-point
+arithmetic.
