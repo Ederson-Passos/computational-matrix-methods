@@ -150,17 +150,18 @@ for N, h in zip(Ns, hs):
     errors_L2.append(np.linalg.norm(err)*np.sqrt(h))
 
 fig, ax = plt.subplots(figsize=(5, 4))
-ax.loglog(hs, errors_Linf, 'o-', color='#1b9e77', label='$L_\infty$ Error', fillstyle='none')
-ax.loglog(hs, errors_L2, 's-', color='#7570b3', label='Discrete $L_2$ Error', fillstyle='none')
+ax.loglog(Ns, errors_Linf, 'o-', color='#1b9e77', label='$L_\infty$ Error', fillstyle='none')
+ax.loglog(Ns, errors_L2, 's-', color='#7570b3', label='Discrete $L_2$ Error', fillstyle='none')
 
-# Reference line O(h)
-hs_ref = np.array([hs[-1], hs[0]])
+# Reference line O(h) which corresponds to O(N^-1)
+Ns_ref = np.array([Ns[0], Ns[-1]])
 ref_start = errors_Linf[0] * 1.5
-ax.loglog(hs_ref, ref_start * (hs_ref / hs[0]), 'k--', label='First-order reference slope', linewidth=1)
+ax.loglog(Ns_ref, ref_start * (Ns_ref / Ns[0])**(-1), 'k--', label='First-order reference slope', linewidth=1)
 
-ax.set_xlabel('Grid spacing $h$')
+ax.set_xticks(Ns)
+ax.set_xticklabels([str(N) for N in Ns])
+ax.set_xlabel('Number of grid points $N$')
 ax.set_ylabel('Error')
-ax.invert_xaxis()
 ax.legend(frameon=False)
 ax.grid(True, linestyle=':', which='both')
 

@@ -69,4 +69,8 @@ distribution is subsequently interpreted in terms of the physical behavior of
 the one-dimensional heat conduction problem.
 
 All numerical computations were performed using double-precision floating-point
-arithmetic.
+arithmetic. For convergence analysis, the discrete $L_2$ error is explicitly defined as
+\begin{equation}
+    \|e\|_{2,h} = \sqrt{h} \, \|e\|_2,
+\end{equation}
+which is the exact formulation implemented in the computational experiment.

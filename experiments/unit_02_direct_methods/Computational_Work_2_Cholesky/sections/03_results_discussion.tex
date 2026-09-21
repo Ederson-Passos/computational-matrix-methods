@@ -33,7 +33,7 @@ The numerical computation of the lower triangular Cholesky factor $G$ yields:
 \end{equation}
 To verify the factorization, the reconstruction residual was calculated as $\|A - G G^T\|_2 \approx 1.096 \times 10^{-14}$, confirming reconstruction to near machine precision.
 
-The $2$-norm condition number of the matrix was computed as $\kappa_2(A) \approx 29.23$.
+Since $A$ is SPD, the $2$-norm condition number can be computed as $\kappa_2(A) = \lambda_{\max}(A) / \lambda_{\min}(A)$. Using the actual computed matrix, the extreme eigenvalues are approximately $\lambda_{\min} = 10.008436$ and $\lambda_{\max} = 292.550973$, and therefore $\kappa_2(A) = 29.230438$ \cite{golub2013matrix}.
 Using the factor $G$, the linear system $Ax = b$ was solved via forward and backward substitution. The computed solution vector is:
 \begin{equation}
     \resizebox{0.95\textwidth}{!}{%
@@ -46,7 +46,7 @@ The algebraic accuracy of this solution is verified by the residual norm $\|Ax -
 
 The original discrete problem was executed exactly as prescribed by Code 2 using the seed $31837$. This generated the parameters $k = 0.2567$, $f = 1.9530$, grid spacing $h=0.1$, and selected the Neumann--Dirichlet boundary condition corresponding to $T'(0) = 0$ and $T(1) = 0$.
 
-The resulting linear system $M_{orig} T_{orig} = s_{orig}$ was solved computationally. The numerical residual is $\|M_{orig} T_{orig} - s_{orig}\|_2 \approx 1.8253 \times 10^{-15}$. This negligible residual verifies that the linear system was solved correctly from a strictly algebraic perspective. However, a scientific analysis requires assessing the consistency of this generated system with the continuous model stated in the assignment.
+The resulting linear system $M_{orig} T_{orig} = s_{orig}$ was solved computationally. The numerical residual is $\|M_{orig} T_{orig} - s_{orig}\|_2 \approx 1.8253 \times 10^{-15}$. This negligible residual verifies that the generated discrete linear system is algebraically solvable and was solved accurately from a strict algebraic perspective. However, this algebraic residual is fundamentally distinct from and does not imply consistency with the stated continuous PDE.
 
 The assignment mathematically defines the steady-state heat equation as:
 \begin{equation}
@@ -85,6 +85,7 @@ For the Neumann boundary at $x=0$, a first-order forward difference approximatio
 \begin{equation}
     -\frac{1}{h} T_0 + \frac{1}{h} T_1 = 0.
 \end{equation}
+This first-order approximation at the boundary limits the global convergence of the corrected scheme to first order, which is sufficient to establish a mathematically consistent discrete representation.
 The Dirichlet boundary at $x=1$ is strictly enforced via $T_{10} = 0$. This corrected linear system, denoted $M_{corr} T_{corr} = s_{corr}$, was solved yielding the corrected numerical solution shown in \autoref{tab:temperature-comparison}.
 
 \begin{table}[ht]
@@ -114,7 +115,7 @@ In contrast to the original formulation, the corrected numerical solution reache
 
 \subsection{Comparison and Convergence Analysis}
 
-\autoref{fig:temperature-comparison} visually emphasizes the qualitative distinction between the formulations. The corrected formulation reproduces the qualitative features of the analytical solution and approaches the analytical profile as the grid is refined. The original formulation exhibits an inverted concavity and scales improperly.
+\autoref{fig:temperature-comparison} visually emphasizes the qualitative distinction between the formulations. The corrected formulation reproduces the qualitative features of the analytical solution and approaches the analytical profile as the grid is refined. The interior stencil of the original formulation approximates $T''$ with the opposite sign and the source term is improperly scaled by $h^2$.
 
 \begin{figure}[ht]
     \centering
@@ -131,7 +132,7 @@ To validate the corrected method, an auxiliary convergence experiment was perfor
     \label{tab:convergence}
     \begin{tabular}{cccc}
         \toprule
-        $N$ & $h$    & $L_\infty$ Error & $L_2$ Error \\
+        $N$ & $h$    & $L_\infty$ Error & Discrete $L_2$ Error \\
         \midrule
         11  & 0.1000 & 3.8039e-01       & 2.3602e-01  \\
         21  & 0.0500 & 1.9019e-01       & 1.1392e-01  \\
