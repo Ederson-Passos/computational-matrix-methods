@@ -35,10 +35,6 @@
 \usepackage{listings}
 \usepackage{xcolor} % Useful for listings formatting
 
-% --- Bibliography ---
-\usepackage[style=numeric, sorting=none]{biblatex}
-\addbibresource{references.bib}
-
 % --- Hyperlinks ---
 \usepackage{hyperref}
 \hypersetup{
@@ -67,7 +63,13 @@
 \input{sections/03_results_discussion.tex}
 
 % --- Bibliography ---
-\printbibliography[heading=bibintoc, title={References}]
+\begin{thebibliography}{9}
+\bibitem{golub2013matrix}
+Golub, G. H., \& Van Loan, C. F. (2013). \emph{Matrix Computations} (4th ed.). Johns Hopkins University Press.
+
+\bibitem{leveque2007finite}
+LeVeque, R. J. (2007). \emph{Finite Difference Methods for Ordinary and Partial Differential Equations: Steady-State and Time-Dependent Problems}. SIAM.
+\end{thebibliography}
 
 % --- Appendix ---
 % The appendix is included here if needed (the Anexo from the assignment)

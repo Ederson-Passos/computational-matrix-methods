@@ -9,6 +9,12 @@ The prescribed matrix $A \in \mathbb{R}^{10 \times 10}$ is symmetric by construc
 Consequently, $A$ is symmetric positive definite (SPD), guaranteeing the existence and uniqueness of the Cholesky factorization $A = G G^T$.
 
 The numerical computation of the lower triangular Cholesky factor $G$ yields:
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/problem1_matrix_cholesky.pdf}
+    \caption{Structure of the generated symmetric positive-definite matrix $A$ and its lower-triangular Cholesky factor $G$.}
+    \label{fig:problem1-matrix-cholesky}
+\end{figure}
 \begin{equation}
     \resizebox{0.95\textwidth}{!}{%
         $G = \begin{pmatrix}
@@ -25,7 +31,7 @@ The numerical computation of the lower triangular Cholesky factor $G$ yields:
             \end{pmatrix}$%
     }
 \end{equation}
-To verify the factorization, the reconstruction residual was calculated as $\|A - G G^T\|_2 \approx 1.096 \times 10^{-14}$, confirming numerical exactness near machine precision.
+To verify the factorization, the reconstruction residual was calculated as $\|A - G G^T\|_2 \approx 1.096 \times 10^{-14}$, confirming reconstruction to near machine precision.
 
 The $2$-norm condition number of the matrix was computed as $\kappa_2(A) \approx 29.23$.
 Using the factor $G$, the linear system $Ax = b$ was solved via forward and backward substitution. The computed solution vector is:
@@ -46,6 +52,15 @@ The assignment mathematically defines the steady-state heat equation as:
 \begin{equation}
     -k T''(x) = f, \quad x \in (0, 1).
 \end{equation}
+The physical configuration of this boundary-value problem is illustrated in \autoref{fig:problem2-physical-configuration}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/problem2_physical_configuration.pdf}
+    \caption{One-dimensional steady-state heat-conduction configuration for the generated Neumann--Dirichlet boundary conditions.}
+    \label{fig:problem2-physical-configuration}
+\end{figure}
+
 Subject to the Neumann--Dirichlet boundary conditions, the exact analytical solution can be derived by integrating the constant source term twice:
 \begin{equation} \label{eq:exact-solution}
     T_{exact}(x) = \frac{f}{2k} (1 - x^2).
@@ -78,7 +93,7 @@ The Dirichlet boundary at $x=1$ is strictly enforced via $T_{10} = 0$. This corr
     \label{tab:temperature-comparison}
     \begin{tabular}{cccccc}
         \toprule
-        $x$ & $T_{exact}$ & $T_{orig}$ & $T_{corr}$ & Error (Original) & Error (Corrected) \\
+        $x$ & $T_{exact}$ & $T_{orig}$ & $T_{corr}$ & $|T_{orig} - T_{exact}|$ & $|T_{corr} - T_{exact}|$ \\
         \midrule
         0.0 & 3.8039      & -0.0418    & 3.4235     & 3.8457e+00       & 3.8039e-01        \\
         0.1 & 3.7658      & -0.0411    & 3.4235     & 3.8069e+00       & 3.4235e-01        \\
@@ -99,12 +114,12 @@ In contrast to the original formulation, the corrected numerical solution reache
 
 \subsection{Comparison and Convergence Analysis}
 
-\autoref{fig:temperature-comparison} visually emphasizes the qualitative distinction between the formulations. The corrected formulation faithfully models the downward concavity and non-negativity of the true analytical solution, while the original formulation exhibits an inverted concavity and scales improperly.
+\autoref{fig:temperature-comparison} visually emphasizes the qualitative distinction between the formulations. The corrected formulation reproduces the qualitative features of the analytical solution and approaches the analytical profile as the grid is refined. The original formulation exhibits an inverted concavity and scales improperly.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.85\textwidth]{figures/temperature_comparison.pdf}
-    \caption{Comparison between the analytical temperature profile, the solution obtained from the original prescribed formulation, and the corrected finite-difference solution.}
+    \caption{Comparison of the analytical solution with the profiles obtained from the original and corrected finite-difference formulations.}
     \label{fig:temperature-comparison}
 \end{figure}
 
@@ -126,10 +141,17 @@ To validate the corrected method, an auxiliary convergence experiment was perfor
     \end{tabular}
 \end{table}
 
-The computed convergence rate in the $L_\infty$-norm is approximately $1.00$, and in the $L_2$-norm is approximately $1.03$. This first-order convergence behavior is mathematically expected because a first-order forward difference approximation was employed for the boundary condition at $x=0$, effectively bottlenecking the global accuracy of the second-order interior scheme.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/problem2_convergence.pdf}
+    \caption{Observed convergence of the corrected formulation under grid refinement; the dashed line denotes a first-order reference slope.}
+    \label{fig:problem2-convergence}
+\end{figure}
+
+The computed convergence rate in the $L_\infty$-norm is approximately $1.00$, and in the $L_2$-norm is approximately $1.03$. The observed first-order convergence is consistent with the first-order forward-difference approximation used for the Neumann boundary condition \cite{leveque2007finite}.
 
 \subsection{Physical Interpretation}
 
 The stated steady-state boundary-value problem describes a one-dimensional bar subject to a constant internal heat source $f > 0$. The zero-flux Neumann boundary condition at $x=0$ models a perfectly insulated edge, while the homogeneous Dirichlet boundary condition at $x=1$ fixes the right edge to a baseline reference temperature of zero. Physically, thermal energy is continuously generated inside the domain and is completely blocked from exiting via the left boundary; therefore, all generated heat must flow rightwards to dissipate. This mechanism produces a temperature profile that is concave downward and reaches its maximum at the insulated boundary. The corrected numerical solution reproduces these qualitative features and approaches the analytical profile as the grid is refined.
 
-By contrast, the original algorithmic formulation uses a discrete operator with the sign of the positive second derivative, together with the nonstandard source scaling described above. At the prescribed grid, this produces a concave-up profile with temperatures below the reference value imposed at $x=1$. This behavior is a consequence of the inconsistency between the generated discrete system and the stated differential equation, not evidence of numerical instability in the linear solve.
+By contrast, the original algorithmic formulation uses a discrete operator with the sign of the positive second derivative, together with the nonstandard source scaling described above. At the prescribed grid, this produces a concave-up profile with temperatures below the reference value imposed at $x=1$. The negative profile is inconsistent with the analytical solution of the stated PDE under the specified parameters and boundary conditions. This behavior is a consequence of the inconsistency between the generated discrete system and the stated differential equation, not evidence of numerical instability in the linear solve.
