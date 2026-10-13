@@ -1,0 +1,228 @@
+\section{Methodology}
+\label{sec:methodology}
+
+\subsection{Data Construction}
+
+The numerical data are generated according to the instructions provided
+in the assignment. The student's enrollment number is converted into
+eight integer digits, replacing every zero with one. These digits are
+then used to construct the coefficient matrix $A$, the vector
+$\mathbf{b}$, and the experimental observations $(x_i,y_i)$.
+
+The original data-generation expressions are preserved. NumPy is used
+for the array construction specified in the assignment, whereas the
+principal linear algebra operations are implemented explicitly using
+Python loops. In particular, no predefined routines for QR
+factorization, least-squares solutions, or polynomial fitting are used.
+
+\subsection{QR Factorization by Modified Gram--Schmidt}
+
+Let $B\in\mathbb{R}^{m\times n}$, with $m\geq n$, be a matrix with
+linearly independent columns. The QR factorization expresses $B$ as
+\begin{equation}
+    B=QR,
+    \label{eq:qr-factorization}
+\end{equation}
+where $Q\in\mathbb{R}^{m\times n}$ has orthonormal columns,
+$Q^TQ=I_n$, and $R\in\mathbb{R}^{n\times n}$ is upper triangular.
+
+The factorization is computed using the modified Gram--Schmidt
+(MGS) algorithm. This method constructs an orthonormal basis for the
+column space of $B$ by successively removing the components of each
+column in the directions of previously computed basis vectors.
+
+Denote the $j$-th column of $B$ by $\mathbf{b}_j$. Initialize
+\begin{equation}
+    \mathbf{v}_j^{(0)}=\mathbf{b}_j.
+\end{equation}
+For $i=1,\ldots,j-1$, compute
+\begin{align}
+    r_{ij}
+     & =\mathbf{q}_i^T\mathbf{v}_j^{(i-1)},      \\
+    \mathbf{v}_j^{(i)}
+     & =\mathbf{v}_j^{(i-1)}-r_{ij}\mathbf{q}_i.
+\end{align}
+The next diagonal entry of $R$ and the corresponding column of $Q$
+are then obtained as
+\begin{align}
+    r_{jj} & =\|\mathbf{v}_j^{(j-1)}\|_2,          \\
+    \mathbf{q}_j
+           & =\frac{\mathbf{v}_j^{(j-1)}}{r_{jj}}.
+\end{align}
+
+The algorithm is applied first to the matrix $A$ and subsequently to
+the design matrix $X$. The resulting factors are used to solve both
+least-squares problems. During implementation, a diagonal entry of
+$R$ that is numerically negligible is treated as an indication of
+possible rank deficiency; the corresponding case must be reported
+rather than dividing by that entry.
+
+\subsection{Selection of the Orthogonalization Method}
+
+Several methods can compute the QR factorization. The choice depends
+on numerical stability, implementation complexity, and the objectives
+of the computational assignment.
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \caption{Comparison of methods for computing the QR factorization.}
+    \label{tab:qr-methods}
+    \begin{tabular}{p{2.5cm} p{5.3cm} p{5.3cm}}
+        \hline
+        \textbf{Method} & \textbf{Advantages} & \textbf{Limitations}       \\
+        \hline
+        Classical Gram--Schmidt
+                        &
+        Simple formulation and straightforward implementation.
+                        &
+        Can lose orthogonality when the columns are nearly linearly
+        dependent.                                                         \\[0.3em]
+
+        Modified Gram--Schmidt
+                        &
+        Explicit construction of the orthonormal basis; generally preserves
+        orthogonality better than the classical variant and is convenient
+        for implementing the algorithm from first principles.
+                        &
+        Can still lose orthogonality for ill-conditioned matrices; it is
+        not generally as numerically robust as Householder QR.             \\[0.3em]
+
+        Householder reflections
+                        &
+        Highly reliable numerical behavior and a standard choice for dense
+        QR factorizations.
+                        &
+        Requires implementing and managing reflection transformations,
+        making the algorithm less direct to explain from first principles. \\[0.3em]
+
+        Givens rotations
+                        &
+        Useful for exploiting sparsity and updating factorizations when
+        individual rows or entries change.
+                        &
+        Requires managing a sequence of rotations, which is unnecessary
+        for the small dense matrices considered here.                      \\
+        \hline
+    \end{tabular}
+\end{table}
+
+The modified Gram--Schmidt method is selected primarily for its
+transparent computational structure and suitability for a
+from-scratch implementation. It provides a direct illustration of
+orthogonalization while improving numerical behavior relative to
+classical Gram--Schmidt. Householder QR would generally be preferable
+when numerical robustness is the primary concern, particularly for
+larger or ill-conditioned problems
+\cite{golub2013matrix,trefethen1997numerical,higham2002accuracy}.
+
+The choice is therefore pedagogical and computational rather than
+a claim that modified Gram--Schmidt is universally the most stable
+QR algorithm.
+
+\subsection{Least-Squares Solution Using QR}
+
+Consider the overdetermined system
+\begin{equation}
+    B\mathbf{z}\approx\mathbf{c},
+\end{equation}
+where $B$ has full column rank. The least-squares solution minimizes
+the squared Euclidean residual:
+\begin{equation}
+    \mathbf{z}^{*}
+    =\underset{\mathbf{z}\in\mathbb{R}^{n}}{\arg\min}
+    \,\|B\mathbf{z}-\mathbf{c}\|_2^2.
+\end{equation}
+
+Substituting $B=QR$ and using the orthonormality of the columns of
+$Q$ gives
+\begin{equation}
+    \begin{aligned}
+        \|B\mathbf{z}-\mathbf{c}\|_2^2
+         & =
+        \|R\mathbf{z}-Q^T\mathbf{c}\|_2^2 \\
+         & \quad+
+        \|(I-QQ^T)\mathbf{c}\|_2^2.
+    \end{aligned}
+    \label{eq:ls-orthogonal-decomposition}
+\end{equation}
+
+The second term is independent of $\mathbf{z}$. Consequently, the
+least-squares solution is obtained by solving the upper triangular
+system
+\begin{equation}
+    R\mathbf{z}=Q^T\mathbf{c}.
+    \label{eq:triangular-system}
+\end{equation}
+
+This system is solved by back substitution, starting from the last
+equation:
+\begin{equation}
+    z_i=
+    \frac{
+        d_i-\displaystyle\sum_{j=i+1}^{n}R_{ij}z_j
+    }{R_{ii}},
+    \qquad i=n,n-1,\ldots,1,
+    \label{eq:back-substitution}
+\end{equation}
+where $\mathbf{d}=Q^T\mathbf{c}$.
+
+For the first problem, $B=A$, $\mathbf{c}=\mathbf{b}$, and
+$\mathbf{z}=\mathbf{x}$. For the second problem, $B=X$,
+$\mathbf{c}=\mathbf{y}$, and $\mathbf{z}=[a,b,c]^T$.
+
+The QR-based approach is preferred to solving the normal equations
+$B^TB\mathbf{z}=B^T\mathbf{c}$. For a full-column-rank matrix, the
+normal equations satisfy
+$\kappa_2(B^TB)=\kappa_2(B)^2$, potentially amplifying the effects
+of poor conditioning. The QR formulation avoids explicitly forming
+$B^TB$ and reduces the least-squares problem to a triangular solve
+\cite{golub2013matrix,higham2002accuracy}.
+
+\subsection{Numerical Verification and Error Evaluation}
+
+The computed QR factors are assessed using two quantities. The
+relative factorization error is defined as
+\begin{equation}
+    \eta_{\mathrm{QR}}
+    =
+    \frac{\|B-QR\|_F}{\|B\|_F},
+    \label{eq:qr-error}
+\end{equation}
+where $\|\cdot\|_F$ denotes the Frobenius norm. The orthogonality
+error is defined as
+\begin{equation}
+    \eta_Q=\|Q^TQ-I_n\|_F.
+    \label{eq:orthogonality-error}
+\end{equation}
+Both quantities are evaluated using explicitly implemented matrix
+operations.
+
+For the first problem, the residual norm
+\begin{equation}
+    \rho_A=\|A\mathbf{x}^{*}-\mathbf{b}\|_2
+    \label{eq:linear-residual}
+\end{equation}
+is calculated to assess the least-squares solution. The uniqueness
+of the solution is examined through the column rank of $A$ and the
+diagonal entries of $R$.
+
+For the quadratic fit, the predicted values are calculated from
+\begin{equation}
+    \widehat{y}_i=ax_i^2+bx_i+c,
+\end{equation}
+and the mean squared error is computed as
+\begin{equation}
+    \operatorname{MSE}
+    =\frac{1}{6}\sum_{i=1}^{6}(y_i-\widehat{y}_i)^2.
+\end{equation}
+
+Finally, the experimental observations and the fitted polynomial
+are plotted together. The numerical algorithms are implemented
+without predefined linear algebra or polynomial-fitting routines;
+a plotting library is used only to visualize the results.
+
+The complete computational implementation, including the
+data-generation code and the routines for QR factorization,
+back substitution, error evaluation, and plotting, is provided
+in the appendix.
