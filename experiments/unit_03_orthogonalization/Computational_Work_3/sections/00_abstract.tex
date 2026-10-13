@@ -1,0 +1,27 @@
+\begin{abstract}
+
+    This work investigates two least-squares problems using data derived
+    from the student's enrollment number. First, an overdetermined linear
+    system $A\mathbf{x}\approx\mathbf{b}$, with
+    $A\in\mathbb{R}^{5\times4}$, is solved using the QR factorization
+    $A=QR$. The least-squares solution is obtained by solving the
+    resulting upper triangular system. The existence of a unique solution
+    is discussed in terms of the rank of the coefficient matrix.
+
+    Second, a quadratic polynomial is fitted to six experimental data
+    points using the least-squares formulation. The associated design
+    matrix is constructed, and the polynomial coefficients are determined
+    computationally. The quality of the fit is assessed by plotting the
+    experimental data and the fitted curve and calculating the mean
+    squared error.
+
+    The numerical implementation explicitly constructs the principal
+    linear algebra algorithms, avoiding high-level routines for QR
+    factorization and least-squares solutions. This approach connects
+    the mathematical foundations of least squares with their
+    computational implementation and numerical evaluation.
+
+\end{abstract}
+
+\noindent\textbf{Keywords:} QR factorization; least squares;
+quadratic polynomial fitting; numerical linear algebra.
