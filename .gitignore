@@ -1,7 +1,27 @@
 .venv/
 __pycache__/
 *.pyc
-.env
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+.env*
+*.local
+local_config.*
+
+# Results and local outputs (protecting student data and temporary artifacts)
+results/
+local_results/
+*_results.*
+*.output.txt
+experiments/**/results/
+experiments/**/local_results/
+
+# Private computational results derived from enrollment data
+**/tc3_problem1_report.txt
+**/local_results/
+**/private_results/
 
 # LaTeX compilation files
 *.aux
@@ -16,3 +36,4 @@ __pycache__/
 *.toc
 *.lof
 *.lot
+
