@@ -24,6 +24,16 @@ from .problem1 import (
     run_problem1,
     validate_and_process_matricula,
 )
+from .problem2 import (
+    build_design_matrix,
+    build_problem2_data,
+    compute_mse,
+    evaluate_polynomial,
+    format_problem2_report,
+    plot_problem2_fit,
+    predict_values,
+    run_problem2,
+)
 
 __all__ = [
     "RankDeficiencyError",
@@ -43,4 +53,13 @@ __all__ = [
     "read_and_validate_matricula",
     "run_problem1",
     "validate_and_process_matricula",
+    "build_design_matrix",
+    "build_problem2_data",
+    "compute_mse",
+    "evaluate_polynomial",
+    "format_problem2_report",
+    "plot_problem2_fit",
+    "predict_values",
+    "run_problem2",
 ]
+

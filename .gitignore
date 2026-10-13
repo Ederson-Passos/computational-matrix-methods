@@ -20,6 +20,8 @@ experiments/**/local_results/
 
 # Private computational results derived from enrollment data
 **/tc3_problem1_report.txt
+**/tc3_problem2_report.txt
+**/problem2_quadratic_fit.*
 **/local_results/
 **/private_results/
 

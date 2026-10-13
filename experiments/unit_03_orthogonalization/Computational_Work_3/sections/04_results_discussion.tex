@@ -1,0 +1,220 @@
+\section{Results Discussion}
+\label{sec:results}
+
+\subsection{QR Factorization and Linear Least-Squares Solution}
+\label{subsec:problem1-results}
+
+The modified Gram--Schmidt algorithm was applied to the
+overdetermined system defined in Section~\ref{sec:problem}. The
+computed factors satisfy $A\approx QR$, where
+$Q\in\mathbb{R}^{5\times4}$ has approximately orthonormal columns
+and $R\in\mathbb{R}^{4\times4}$ is upper triangular.
+
+The computed matrices, rounded to six decimal places, are
+
+\begin{equation}
+    Q\approx
+    \begin{bmatrix}
+        0.295599  & 0.242348  & -0.209363 & 0.159387  \\
+        0.197066  & -0.200200 & 0.322900  & 0.898629  \\
+        0.492665  & 0.140811  & 0.781674  & -0.352688 \\
+        -0.098533 & 0.938737  & -0.000348 & 0.202929  \\
+        -0.788263 & 0.011495  & 0.490803  & 0.038631
+    \end{bmatrix},
+    \label{eq:computed-Q}
+\end{equation}
+
+and
+
+\begin{equation}
+    R\approx
+    \begin{bmatrix}
+        10.148892 & -4.926646 & -3.251587 & -4.236916 \\
+        0         & 10.135490 & 2.859317  & 4.846950  \\
+        0         & 0         & 13.048045 & 2.480397  \\
+        0         & 0         & 0         & 10.020142
+    \end{bmatrix}.
+    \label{eq:computed-R}
+\end{equation}
+
+The quality of the factorization was assessed using the relative
+reconstruction error and the orthogonality error. The computed
+values were
+
+\begin{equation}
+    \eta_{\mathrm{QR}}=1.0683\times10^{-16},
+    \qquad
+    \eta_Q=4.5180\times10^{-16}.
+\end{equation}
+
+Both indicators are close to the expected scale of floating-point
+rounding errors for this computation. These results support the
+numerical accuracy of the factorization and the orthogonality of
+the computed columns of $Q$.
+
+The least-squares solution was obtained by solving
+$R\mathbf{x}^{*}=Q^T\mathbf{b}$ using back substitution. The
+resulting solution, rounded to nine decimal places, is
+
+\begin{equation}
+    \mathbf{x}^{*}\approx
+    \begin{bmatrix}
+        -0.404938762 \\
+        -0.040220457 \\
+        0.992366790  \\
+        -0.568506366
+    \end{bmatrix}.
+    \label{eq:computed-solution}
+\end{equation}
+
+The Euclidean norm of the residual was
+
+\begin{equation}
+    \|\mathbf{A}\mathbf{x}^{*}-\mathbf{b}\|_2
+    \approx 7.677354.
+\end{equation}
+
+The nonzero residual indicates that the original system is
+inconsistent. This is expected for an overdetermined least-squares
+problem and does not, by itself, indicate a failure of the numerical
+method. Instead, the solution minimizes the residual norm among
+all vectors in $\mathbb{R}^4$.
+
+To assess the optimality of the computed solution, the norm of
+the residual projected onto the column directions of $A$ was also
+evaluated. The result was
+
+\begin{equation}
+    \left\|A^T(A\mathbf{x}^{*}-\mathbf{b})\right\|_2
+    \approx 6.1020\times10^{-14}.
+\end{equation}
+
+This value is numerically small and is consistent with the
+least-squares optimality condition $A^T(A\mathbf{x}^{*}-\mathbf{b})
+    =\mathbf{0}$. Hence, the computed residual is approximately
+orthogonal to the column space of $A$.
+
+Finally, the diagonal entries of $R$ were compared with the
+scale-dependent numerical tolerance used by the implementation.
+All four diagonal entries were substantially larger than this
+tolerance, supporting the numerical assessment that $A$ has full
+column rank. Therefore, the least-squares solution is unique.
+
+These results validate the use of the modified Gram--Schmidt
+factorization and back substitution for the matrix considered in
+this experiment. Nevertheless, modified Gram--Schmidt without
+column pivoting is not a universally reliable rank-revealing
+method for severely ill-conditioned matrices. Householder QR
+or rank-revealing factorizations may be preferable when stronger
+numerical robustness is required
+\cite{golub2013matrix,higham2002accuracy}.
+
+\subsection{Quadratic Least-Squares Fitting}
+\label{subsec:quadratic-fitting}
+
+The second experiment considered the least-squares approximation
+of six observations by a polynomial of degree at most two.
+The design matrix $X\in\mathbb{R}^{6\times3}$ was constructed
+using the columns associated with $x^2$, $x$, and the constant
+term. The coefficient vector
+$\boldsymbol{\theta}=[a,b,c]^T$ was computed using the reduced
+QR factorization and back substitution.
+
+The computed coefficients were
+\begin{equation}
+    \boldsymbol{\theta}^{*}\approx
+    \begin{bmatrix}
+        1.9739\times10^{-15} \\
+        0.4000               \\
+        0.6000
+    \end{bmatrix}.
+    \label{eq:quadratic-coefficients}
+\end{equation}
+
+Thus, the fitted polynomial is
+\begin{equation}
+    p(x)\approx 0.4000x+0.6000,
+    \label{eq:fitted-polynomial}
+\end{equation}
+because the estimated quadratic coefficient is numerically
+negligible. Although a quadratic model was specified, the resulting
+least-squares polynomial is effectively linear at the displayed
+precision. This behavior is a property of the data and does not
+indicate a failure of the numerical algorithm.
+
+Table~\ref{tab:quadratic-fit-results} compares the observations
+with the fitted values and the corresponding residuals.
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \caption{Observations, fitted values, and residuals.}
+    \label{tab:quadratic-fit-results}
+    \begin{tabular}{rrrr}
+        \hline
+        $x_i$ & $y_i$ & $\widehat{y}_i$ & $y_i-\widehat{y}_i$ \\
+        \hline
+        1     & 1     & 1.0             & 0.0                 \\
+        2     & 1     & 1.4             & -0.4                \\
+        3     & 3     & 1.8             & 1.2                 \\
+        4     & 1     & 2.2             & -1.2                \\
+        5     & 3     & 2.6             & 0.4                 \\
+        6     & 3     & 3.0             & 0.0                 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+The residual vector has Euclidean norm
+\begin{equation}
+    \|\mathbf{y}-X\boldsymbol{\theta}^{*}\|_2
+    \approx 1.7889.
+\end{equation}
+The mean squared error is
+\begin{equation}
+    \operatorname{MSE}
+    =\frac{1}{6}\sum_{i=1}^{6}
+    (y_i-\widehat{y}_i)^2
+    =\frac{3.2}{6}
+    \approx 0.5333.
+    \label{eq:quadratic-mse}
+\end{equation}
+
+The residual is nonzero because the fitted polynomial does not
+pass through every observation. This is expected in a least-squares
+approximation and does not imply that the computed minimizer is
+inaccurate. The MSE quantifies the discrepancy between the data
+and the fitted model, whereas the numerical indicators assess the
+accuracy of the computational procedure.
+
+The QR factorization produced a relative reconstruction error of
+$7.3017\times10^{-17}$, while the orthogonality error was
+$3.9468\times10^{-15}$. The least-squares optimality indicator,
+$\|X^T(X\boldsymbol{\theta}^{*}-\mathbf{y})\|_2$, was
+$2.3055\times10^{-14}$. These values are consistent with a
+numerically accurate solution for this problem.
+
+The uniqueness of the solution follows from the full column
+rank of $X$. Indeed, if
+$X\boldsymbol{\theta}=\mathbf{0}$, then the polynomial
+$a x^2+bx+c$ vanishes at the six distinct values
+$x_i=1,\ldots,6$. A nonzero polynomial of degree at most two
+cannot have six distinct roots. Therefore,
+$\boldsymbol{\theta}=\mathbf{0}$, so
+$\operatorname{rank}(X)=3$ and the least-squares minimizer is
+unique.
+
+Figure~\ref{fig:quadratic-fit} presents the observations and the
+fitted polynomial. The nearly straight fitted curve is consistent
+with the numerically negligible quadratic coefficient.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.82\textwidth]{local_results/problem2_quadratic_fit.pdf}
+    \caption{Experimental observations and the quadratic least-squares fitted curve.}
+    \label{fig:quadratic-fit}
+\end{figure}
+
+Since the observations are constructed from the enrollment digits
+as prescribed by the assignment, the analysis concerns the
+numerical behavior of the fitting procedure rather than an
+empirical conclusion about predator--prey dynamics.
