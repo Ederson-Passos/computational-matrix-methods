@@ -264,6 +264,7 @@ def plot_problem2_fit(
     mse: float,
     output_paths: Sequence[str] | None = None,
     show_equation: bool = True,
+    title: str | None = None,
 ) -> list[str]:
     """Generates an editorial scientific figure following Edward Tufte principles.
 
@@ -358,8 +359,9 @@ def plot_problem2_fit(
     ax.set_xlabel(r"Number of prey, $x$", labelpad=6)
     ax.set_ylabel(r"Predator density, $y$ ($\mathrm{km}^{-2}$)", labelpad=6)
 
-    # Subtle editorial title
-    ax.set_title("Quadratic Least-Squares Fit to Experimental Data", pad=12, fontweight="normal")
+    # Optional editorial title (omitted by default when caption is placed in LaTeX)
+    if title:
+        ax.set_title(title, pad=12, fontweight="normal")
 
     # Clean, subtle horizontal gridlines only (Tufte minimalism)
     ax.yaxis.grid(True, linestyle=":", linewidth=0.5, color="#d1d5db", alpha=0.7, zorder=1)
