@@ -1,0 +1,161 @@
+% Requires \usepackage{listings} in the main document preamble.
+\lstdefinestyle{pythonTC}{
+    language=Python,
+    basicstyle=\ttfamily\scriptsize,
+    numbers=none,
+    frame=single,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false,
+    aboveskip=4pt,
+    belowskip=4pt
+}
+
+\section{Computational Implementation}
+\label{app:computational-implementation}
+
+The core numerical algorithms were implemented explicitly with Python lists,
+loops, arithmetic operations, and the standard library. NumPy is used for the
+input-array construction specified in the assignment and to generate plotting
+coordinates; Matplotlib is used only to render the figure. The solution does
+not call high-level library solvers such as \texttt{numpy.linalg.qr},
+\texttt{numpy.linalg.lstsq}, \texttt{numpy.linalg.solve}, or
+\texttt{numpy.polyfit}. These abridged excerpts rely on helper routines also
+defined in the source modules; the complete executable files include
+validation, diagnostics, command-line interaction, and report formatting.
+
+\subsection{QR Factorization and Least-Squares Solution}
+
+The inner products, norms, vector updates, and matrix operations used by the
+solver are implemented with loops and summations. The reduced QR factorization
+uses Modified Gram--Schmidt: each column is successively orthogonalized
+against the previously computed columns of $Q$. The projection coefficients
+are stored in the upper-triangular matrix $R$.
+
+\begin{lstlisting}[style=pythonTC,
+    caption={Core operations and Modified Gram--Schmidt factorization from
+    \texttt{linear\_algebra.py}.},
+    label={lst:mgs-core}]
+import math
+import sys
+
+
+def vector_dot(u, v):
+    return sum(ui * vi for ui, vi in zip(u, v))
+
+
+def vector_norm(u):
+    return math.sqrt(sum(ui * ui for ui in u))
+
+
+def qr_mgs(A, tol=None):
+    A = to_float_matrix(A)
+    m, n = matrix_shape(A)
+    scale = frobenius_norm(A)
+    if tol is None:
+        tol = max(m, n) * sys.float_info.epsilon * scale
+
+    Q = [[0.0 for _ in range(n)] for _ in range(m)]
+    R = [[0.0 for _ in range(n)] for _ in range(n)]
+    q_cols = []
+    full_rank = True
+
+    for j in range(n):
+        v = get_column(A, j)
+        for i in range(j):
+            qi = q_cols[i]
+            R[i][j] = vector_dot(qi, v)
+            v = [v[k] - R[i][j] * qi[k] for k in range(m)]
+
+        R[j][j] = vector_norm(v)
+        if R[j][j] <= tol:
+            full_rank = False
+            qj = [0.0] * m
+        else:
+            qj = [v[k] / R[j][j] for k in range(m)]
+        q_cols.append(qj)
+        for k in range(m):
+            Q[k][j] = qj[k]
+
+    info = {
+        "is_full_rank": full_rank,
+        "tolerance": tol,
+        "diagonal_entries": [R[i][i] for i in range(n)],
+    }
+    return Q, R, info
+\end{lstlisting}
+
+The rank threshold is scale-dependent,
+\[
+    \mathrm{tol}=\max(m,n)\,\epsilon_{\mathrm{mach}}\,\|A\|_F.
+\]
+If a diagonal entry of $R$ does not exceed this threshold, the
+implementation flags possible numerical rank deficiency and avoids
+normalizing by a negligible value. Modified Gram--Schmidt without column
+pivoting is not a universally reliable rank-revealing method for severely
+ill-conditioned matrices.
+
+For full-column-rank matrices, $A=QR$ reduces the least-squares problem to
+$R\mathbf{x}=Q^T\mathbf{b}$. The program forms $Q^T\mathbf{b}$ with its own
+matrix--vector routine and solves the triangular system by backward
+substitution.
+
+\begin{lstlisting}[style=pythonTC,
+    caption={Back substitution and the QR-based least-squares solve.},
+    label={lst:backsub}]
+def back_substitution(R, d, tol):
+    n = len(R)
+    x = [0.0] * n
+    for i in range(n - 1, -1, -1):
+        if abs(R[i][i]) <= tol:
+            raise RankDeficiencyError("Numerically singular system")
+        s = sum(R[i][j] * x[j] for j in range(i + 1, n))
+        x[i] = (d[i] - s) / R[i][i]
+    return x
+
+
+def solve_least_squares_qr(A, b, tol=None):
+    Q, R, info = qr_mgs(A, tol)
+    if not info["is_full_rank"]:
+        raise RankDeficiencyError("Possible rank deficiency")
+    d = matrix_vector_mul(matrix_transpose(Q), b)
+    x = back_substitution(R, d, info["tolerance"])
+    return x, Q, R, info
+\end{lstlisting}
+
+\subsection{Data Construction and Quadratic Fit}
+
+For Problem~1, the matrix and right-hand-side vector retain the expressions
+and NumPy array construction supplied in the assignment. That prescribed
+constructor is not reproduced here. For Problem~2, the design matrix is
+assembled as rows $(x_i^2,x_i,1)$ using Python list operations; the same QR
+solver is reused, and the MSE is calculated directly from the residuals.
+
+\begin{lstlisting}[style=pythonTC,
+    caption={Problem 2: design matrix, fitted values, and explicit MSE.},
+    label={lst:tc3-data-mse}]
+# x and y are generated according to the assignment.
+X = [[float(xi)**2, float(xi), 1.0] for xi in x]
+theta, Q, R, info = solve_least_squares_qr(X, y)
+a, b_coef, c = theta
+y_hat = [a*xi**2 + b_coef*xi + c for xi in x]
+mse = sum((yi - pi)**2 for yi, pi in zip(y, y_hat)) / len(y)
+\end{lstlisting}
+
+\subsection{Numerical Verification and Visualization}
+
+The verification metrics are computed using the same explicit matrix and
+vector routines. For each matrix $B$ and right-hand side $\mathbf{c}$, the
+implementation evaluates
+\begin{align}
+    \eta_{\mathrm{QR}} &= \frac{\|B-QR\|_F}{\|B\|_F}, &
+    \eta_Q &= \|Q^TQ-I\|_F,\\
+    \rho &= \|B\mathbf{z}^*-\mathbf{c}\|_2, &
+    \eta_{\mathrm{LS}} &= \|B^T(B\mathbf{z}^*-\mathbf{c})\|_2.
+\end{align}
+Here, $\eta_{\mathrm{QR}}$ and $\eta_Q$ assess reconstruction and
+orthogonality, whereas $\eta_{\mathrm{LS}}$ checks the least-squares
+optimality condition. The residual norm and MSE measure fit to the data,
+not numerical error in the solver. Matplotlib is used only to render the
+curve and observations; it does not estimate the polynomial coefficients.

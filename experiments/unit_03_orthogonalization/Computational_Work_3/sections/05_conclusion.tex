@@ -1,0 +1,51 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+This work implemented and evaluated two least-squares procedures using a
+reduced QR factorization computed by the Modified Gram--Schmidt method.
+The numerical routines for inner products, norms, matrix operations, QR
+factorization, and backward substitution were written explicitly in Python
+rather than delegated to high-level linear algebra solvers. The results
+demonstrate how the QR formulation converts each overdetermined problem into
+an upper-triangular system while allowing the computation to be assessed
+through independent numerical indicators.
+
+For the first problem, the relative QR reconstruction error was
+approximately $1.07\times10^{-16}$, and the orthogonality error was
+approximately $4.52\times10^{-16}$. The optimality indicator,
+$\|A^T(A\mathbf{x}^*-\mathbf{b})\|_2$, was approximately
+$6.10\times10^{-14}$. Together with the full-column-rank diagnostic, these
+values are consistent with a numerically accurate and unique least-squares
+solution for the matrix considered. The residual norm remained nonzero, as
+expected for an inconsistent overdetermined system; it measures the distance
+from $\mathbf b$ to the column space of $A$ rather than a failure of the
+algorithm.
+
+For the second problem, the estimated coefficients were
+$a\approx1.97\times10^{-15}$, $b=0.4$, and $c=0.6$. Thus, although a
+polynomial of degree at most two was prescribed, the fitted polynomial is
+effectively linear at the reported precision: $p(x)\approx0.4x+0.6$. The
+mean squared error was approximately $0.5333$, while the QR reconstruction,
+orthogonality, and least-squares optimality indicators were approximately
+$7.30\times10^{-17}$, $3.95\times10^{-15}$, and $2.31\times10^{-14}$,
+respectively. This illustrates the distinction between numerical accuracy
+and fit quality: small algorithmic errors do not imply that the model
+reproduces every observation exactly.
+
+The full-column-rank condition ensures uniqueness in both problems. For the
+quadratic fit, this follows theoretically because the six distinct
+abscissas make the three columns of the design matrix linearly independent.
+Numerically, the diagonals of the computed triangular factors also exceeded
+the adopted rank tolerance. Nevertheless, Modified Gram--Schmidt without
+column pivoting is not a universally reliable rank-revealing method for
+severely ill-conditioned matrices; a pivoted QR factorization or singular
+value decomposition may be preferable when stronger rank diagnostics are
+required \cite{higham2002accuracy}.
+
+Finally, the observations in this assignment are generated from the
+enrollment digits according to the prescribed rules. Consequently, the
+second experiment illustrates polynomial least-squares fitting and
+numerical validation, not an empirical inference about predator--prey
+dynamics. Overall, the two experiments demonstrate the practical
+connection between least-squares theory, explicit algorithmic
+implementation, and numerical verification.

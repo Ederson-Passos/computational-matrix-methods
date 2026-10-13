@@ -1,0 +1,38 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Least-squares methods provide a systematic way to obtain an approximate
+solution when a linear system is overdetermined or when a set of
+observations cannot be represented exactly by a prescribed model. Their
+reliability depends not only on the mathematical formulation but also on the
+numerical properties of the algorithms used to compute the solution
+\cite{golub2013matrix,trefethen1997numerical}.
+
+This work investigates two least-squares problems specified in the
+Computational Work 3 assignment. First, a linear system
+$A\mathbf{x}\approx\mathbf{b}$, with $A\in\mathbb{R}^{5\times4}$, is addressed
+through the reduced QR factorization of $A$. Second, six data points are
+fitted with a polynomial of degree at most two, expressed as a linear
+least-squares problem involving a design matrix $X\in\mathbb{R}^{6\times3}$.
+In both cases, the data are constructed according to the assignment
+instructions from the digits of the student's enrollment number.
+
+The computational objective is to connect these formulations to their
+implementation. The main numerical routines—including inner products,
+vector and matrix operations, the Modified Gram--Schmidt QR factorization,
+backward substitution, and error indicators—are implemented explicitly in
+Python. NumPy is retained for the array construction required by the
+assignment and for generating plotting coordinates, while Matplotlib is used
+to visualize the polynomial fit. No high-level NumPy or SciPy solver is used
+to calculate the QR factorization or the least-squares coefficients. The
+implementation and selected code excerpts are provided in the appendix.
+
+The computed solutions are assessed through the QR reconstruction error, the
+orthogonality error of $Q$, the least-squares optimality condition, and, for
+the polynomial fit, the mean squared error. These measures serve different
+purposes: the first indicators assess numerical consistency of the
+algorithms, whereas the mean squared error quantifies the discrepancy between
+the observations and the fitted model. The analysis also examines the
+conditions under which each least-squares solution is unique, while
+acknowledging the numerical limitations of Modified Gram--Schmidt without
+column pivoting \cite{higham2002accuracy}.

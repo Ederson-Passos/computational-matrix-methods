@@ -373,9 +373,9 @@ def plot_problem2_fit(
     ax.spines["left"].set_color("#4b5563")
     ax.spines["bottom"].set_color("#4b5563")
 
-    # Calibrate axis limits: horizontal covers data with subtle margin; vertical starts at 0
-    ax.set_xlim(x_min - 0.4, x_max + 0.4)
-    ax.set_xticks([int(xi) for xi in sorted(x_points)])
+    # Calibrate axis limits: both axes start at 0 (canonical Cartesian origin)
+    ax.set_xlim(left=0.0, right=x_max + 0.5)
+    ax.set_xticks(list(range(0, int(x_max) + 1)))
 
     y_max = max(list(y_points) + list(y_dense))
     ax.set_ylim(bottom=0.0, top=y_max + 0.6)
