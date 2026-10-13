@@ -1,0 +1,121 @@
+\section{Problem Formulation}
+\label{sec:problem}
+
+This work addresses two computational problems involving least-squares
+methods. The numerical data are constructed from the eight digits of
+the student's enrollment number. Any zero digit is replaced by one
+before constructing the matrices and vectors.
+
+\subsection{Problem 1: QR Factorization and Linear Least Squares}
+
+Consider the overdetermined linear system
+\begin{equation}
+    A\mathbf{x}\approx\mathbf{b},
+\end{equation}
+where $A\in\mathbb{R}^{5\times4}$, $\mathbf{x}\in\mathbb{R}^{4}$,
+and $\mathbf{b}\in\mathbb{R}^{5}$. The coefficient matrix and
+right-hand-side vector are defined by
+\begin{equation}
+    A=
+    \begin{bmatrix}
+        m_1+2 & m_2   & -m_3  & m_4  \\
+        m_2+1 & -m_3  & m_4+2 & m_5  \\
+        m_3+2 & -m_4  & m_5+1 & -m_6 \\
+        -m_4  & m_5+2 & m_6   & m_7  \\
+        -m_5  & m_6+1 & m_7+2 & m_8
+    \end{bmatrix},
+    \qquad
+    \mathbf{b}=
+    \begin{bmatrix}
+        m_1+m_2 \\
+        -m_3    \\
+        m_4+m_5 \\
+        -m_6    \\
+        m_7+m_8
+    \end{bmatrix}.
+    \label{eq:system-data}
+\end{equation}
+
+The first objective is to compute the reduced QR factorization
+\begin{equation}
+    A=QR,
+\end{equation}
+where $Q\in\mathbb{R}^{5\times4}$ has orthonormal columns and
+$R\in\mathbb{R}^{4\times4}$ is upper triangular.
+
+The least-squares solution is defined as
+\begin{equation}
+    \mathbf{x}^{*}
+    =\underset{\mathbf{x}\in\mathbb{R}^{4}}{\arg\min}
+    \,\|A\mathbf{x}-\mathbf{b}\|_2^2.
+    \label{eq:ls-first}
+\end{equation}
+
+The uniqueness of this solution depends on the column rank of $A$.
+In particular, the solution is unique if and only if
+$\operatorname{rank}(A)=4$. This condition will be assessed
+computationally for the given enrollment number.
+
+\subsection{Problem 2: Quadratic Least-Squares Fitting}
+
+Consider six experimental data points $(x_i,y_i)$, where
+\begin{equation}
+    x_i=i,\qquad
+    y_i=m_i\bmod 5,\qquad i=1,\ldots,6.
+    \label{eq:experimental-data}
+\end{equation}
+
+The objective is to approximate these data using a quadratic
+polynomial
+\begin{equation}
+    p(x)=ax^2+bx+c.
+\end{equation}
+
+Defining the coefficient vector
+$\boldsymbol{\theta}=[a,b,c]^T$, the fitting problem can be
+expressed as
+\begin{equation}
+    X\boldsymbol{\theta}\approx\mathbf{y},
+\end{equation}
+where
+\begin{equation}
+    X=
+    \begin{bmatrix}
+        1^2 & 1 & 1 \\
+        2^2 & 2 & 1 \\
+        3^2 & 3 & 1 \\
+        4^2 & 4 & 1 \\
+        5^2 & 5 & 1 \\
+        6^2 & 6 & 1
+    \end{bmatrix},
+    \qquad
+    \mathbf{y}=
+    \begin{bmatrix}
+        y_1 \\y_2\\y_3\\y_4\\y_5\\y_6
+    \end{bmatrix}.
+    \label{eq:quadratic-system}
+\end{equation}
+
+The polynomial coefficients are obtained by solving
+\begin{equation}
+    \boldsymbol{\theta}^{*}
+    =\underset{\boldsymbol{\theta}\in\mathbb{R}^{3}}
+    {\arg\min}
+    \,\|X\boldsymbol{\theta}-\mathbf{y}\|_2^2.
+    \label{eq:ls-quadratic}
+\end{equation}
+
+Since the six values of $x_i$ are distinct, the three columns of
+$X$ are linearly independent. Therefore,
+$\operatorname{rank}(X)=3$, and the least-squares solution is
+unique.
+
+Finally, the quality of the fitted polynomial is evaluated by
+plotting the experimental points and the fitted curve and by
+computing the mean squared error (MSE):
+\begin{equation}
+    \operatorname{MSE}
+    =\frac{1}{6}\sum_{i=1}^{6}
+    \left[y_i-p(x_i)\right]^2.
+    \label{eq:mse}
+\end{equation}
