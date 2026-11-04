@@ -1,0 +1,66 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- Fonts and Encoding ---
+% Requires compilation with XeLaTeX or LuaLaTeX
+\usepackage{fontspec}
+\setmainfont{Times New Roman} % Fallback: If not available, FreeSerif or TeX Gyre Termes could be used, but Times New Roman is the strict requirement.
+
+% --- Page Geometry ---
+\usepackage[left=2cm, right=2cm, top=2cm, bottom=1.5cm]{geometry}
+
+% --- Line Spacing ---
+\usepackage{setspace}
+\onehalfspacing
+
+% --- Mathematical Packages ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+
+% --- Figures and Tables ---
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor} % Useful for listings formatting
+
+% --- Hyperlinks ---
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\begin{document}
+
+% --- Compact Header / Title ---
+% Avoiding \maketitle to save space for the 10-page limit
+\begin{center}
+    {\Large \textbf{Computational Work 4}} \\[0.5em]
+    {\large Éderson Passos Silva \quad Registration: 00318375} \\[0.2em]
+    {\normalsize Course: Computational Matrix Methods} \\
+    {\normalsize Professor: Cibele Aparecida Ladeia}
+\end{center}
+\vspace{1em}
+
+% --- Document Content ---
+\input{sections/00_abstract.tex}
+\input{sections/01_introduction.tex}
+\input{sections/02_problem.tex}
+\input{sections/03_methodology.tex}
+\input{sections/04_results_discussion.tex}
+\input{sections/05_conclusion.tex}
+
+% --- Bibliography ---
+\bibliographystyle{plain}
+\bibliography{references}
+
+% --- Appendix ---
+% The appendix is included here if needed (the Anexo from the assignment)
+\newpage
+\appendix
+\input{sections/06_appendix.tex}
+
+\end{document}
