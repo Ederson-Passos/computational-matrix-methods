@@ -3,7 +3,8 @@
 \subsection{Decomposição real de Schur: Problemas 1a e 1b}
 
 A redução de Hessenberg remove a entrada \(a_{31}\) que impede a aplicação direta do QR estruturado. Em seguida, o algoritmo QR com rotações de Givens convergiu em 68 iterações para a matriz triangular superior \(T\). As matrizes obtidas, apresentadas com seis casas decimais, são
-\[
+\begin{equation*}
+\setlength{\arraycolsep}{3.5pt}
 Q=\begin{bmatrix}
 0.414938&0.901657&-0.121827&0\\
 0.908765&-0.417248&0.007119&0\\
@@ -17,7 +18,7 @@ T=\begin{bmatrix}
 0&0&2.887791&27.550178\\
 0&0&0&34
 \end{bmatrix}.
-\]
+\end{equation*}
 A quarta linha de \(A_1\) já apresenta desacoplamento, de modo que \(\lambda=34\) é identificável diretamente. A transformação de similaridade preserva essa estrutura.
 
 Os autovalores extraídos da diagonal de \(T\) são
@@ -77,7 +78,7 @@ q\approx
 0.011131&-0.436725&-0.843412&-0.197199&0.242727
 \end{bmatrix}^{T}.
 \]
-A Figura~\ref{fig:convergencia} apresenta a evolução da aproximação do autovalor, enquanto a Figura~\ref{fig:erro} mostra a redução do erro relativo. A tabela completa das 818 iterações é disponibilizada no arquivo \texttt{iteracoes\_metodo\_potencia.csv}, gerado a partir do histórico do algoritmo. A Tabela~\ref{tab:iteracoes} apresenta pontos representativos do histórico, incluindo as primeiras iterações e a aproximação final.
+A Figura~\ref{fig:convergencia} apresenta a evolução da aproximação do autovalor, enquanto a Figura~\ref{fig:erro} mostra a redução do erro relativo. A tabela completa das 818 iterações é disponibilizada no arquivo \nolinkurl{iteracoes_metodo_potencia.csv}, gerado a partir do histórico do algoritmo. A Tabela~\ref{tab:iteracoes} apresenta pontos representativos do histórico, incluindo as primeiras iterações e a aproximação final.
 
 \begin{figure}[H]
 \centering

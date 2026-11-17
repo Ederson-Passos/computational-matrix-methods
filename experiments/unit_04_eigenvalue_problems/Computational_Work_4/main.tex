@@ -1,10 +1,18 @@
+% !TEX program = xelatex
 \documentclass[12pt,a4paper]{article}
 
-% Compilação: XeLaTeX ou LuaLaTeX (Times New Roman).
-% No Overleaf, selecione XeLaTeX.
-\usepackage{fontspec}
-\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{Liberation Serif}}
-\usepackage[brazil]{babel}
+% Suporte universal a compiladores: XeLaTeX / LuaLaTeX (fontspec) ou pdfLaTeX (mathptmx)
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage{mathptmx}
+\else
+  \usepackage{fontspec}
+  \IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{Liberation Serif}}
+\fi
+
+\usepackage[brazilian]{babel}
 \usepackage{geometry}
 \geometry{a4paper,left=2cm,right=2cm,top=2cm,bottom=1.5cm}
 \usepackage{setspace}
@@ -12,6 +20,7 @@
 \usepackage{amsmath,amssymb,mathtools}
 \usepackage{booktabs,tabularx,longtable,array}
 \usepackage{graphicx}
+\graphicspath{{scripts/}{docs/}}
 \usepackage{float}
 \usepackage{caption}
 \usepackage{url}
@@ -46,14 +55,14 @@ Prof.\textsuperscript{a} Dr.\textsuperscript{a} Cibele Aparecida Ladeia}
 
 \begin{document}
 \maketitle
-\input{00_abstract}
-\input{01_introduction}
-\input{02_problem}
-\input{03_methodology}
-\input{04_results_discussion}
-\input{05_conclusion}
+\input{sections/00_abstract}
+\input{sections/01_introduction}
+\input{sections/02_problem}
+\input{sections/03_methodology}
+\input{sections/04_results_discussion}
+\input{sections/05_conclusion}
 \bibliographystyle{plain}
 \bibliography{references}
 \appendix
-\input{06_appendix}
+\input{sections/06_appendix}
 \end{document}
