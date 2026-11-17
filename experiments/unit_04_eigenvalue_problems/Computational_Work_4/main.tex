@@ -1,66 +1,59 @@
-\documentclass[12pt, a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 
-% --- Fonts and Encoding ---
-% Requires compilation with XeLaTeX or LuaLaTeX
+% Compilação: XeLaTeX ou LuaLaTeX (Times New Roman).
+% No Overleaf, selecione XeLaTeX.
 \usepackage{fontspec}
-\setmainfont{Times New Roman} % Fallback: If not available, FreeSerif or TeX Gyre Termes could be used, but Times New Roman is the strict requirement.
-
-% --- Page Geometry ---
-\usepackage[left=2cm, right=2cm, top=2cm, bottom=1.5cm]{geometry}
-
-% --- Line Spacing ---
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{Liberation Serif}}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\geometry{a4paper,left=2cm,right=2cm,top=2cm,bottom=1.5cm}
 \usepackage{setspace}
 \onehalfspacing
-
-% --- Mathematical Packages ---
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{bm}
-
-% --- Figures and Tables ---
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,tabularx,longtable,array}
 \usepackage{graphicx}
-\usepackage{booktabs}
 \usepackage{float}
+\usepackage{caption}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
 \usepackage{listings}
-\usepackage{xcolor} % Useful for listings formatting
-
-% --- Hyperlinks ---
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    citecolor=blue,
-    urlcolor=blue
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{enumitem}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+\captionsetup{font=small,labelfont=bf}
+\lstset{
+  language=Python,basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\bfseries,commentstyle=\itshape,
+  numbers=left,numberstyle=\tiny,stepnumber=1,
+  breaklines=true,breakatwhitespace=false,
+  frame=single,showstringspaces=false,
+  inputencoding=utf8,extendedchars=true
 }
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabela}
+
+\title{\textbf{Decomposição Real de Schur e Método da Potência\\
+para Problemas de Autovalores}}
+\author{Éderson Passos Silva\\
+Matrícula: 318375\\[0.4em]
+Universidade Federal do Rio Grande do Sul\\
+Programa de Pós-Graduação em Matemática Aplicada\\
+Disciplina: Métodos Matriciais Computacionais\\
+Prof.\textsuperscript{a} Dr.\textsuperscript{a} Cibele Aparecida Ladeia}
+\date{Novembro de 2026}
 
 \begin{document}
-
-% --- Compact Header / Title ---
-% Avoiding \maketitle to save space for the 10-page limit
-\begin{center}
-    {\Large \textbf{Computational Work 4}} \\[0.5em]
-    {\large Éderson Passos Silva \quad Registration: 00318375} \\[0.2em]
-    {\normalsize Course: Computational Matrix Methods} \\
-    {\normalsize Professor: Cibele Aparecida Ladeia}
-\end{center}
-\vspace{1em}
-
-% --- Document Content ---
-\input{sections/00_abstract.tex}
-\input{sections/01_introduction.tex}
-\input{sections/02_problem.tex}
-\input{sections/03_methodology.tex}
-\input{sections/04_results_discussion.tex}
-\input{sections/05_conclusion.tex}
-
-% --- Bibliography ---
+\maketitle
+\input{00_abstract}
+\input{01_introduction}
+\input{02_problem}
+\input{03_methodology}
+\input{04_results_discussion}
+\input{05_conclusion}
 \bibliographystyle{plain}
 \bibliography{references}
-
-% --- Appendix ---
-% The appendix is included here if needed (the Anexo from the assignment)
-\newpage
 \appendix
-\input{sections/06_appendix.tex}
-
+\input{06_appendix}
 \end{document}

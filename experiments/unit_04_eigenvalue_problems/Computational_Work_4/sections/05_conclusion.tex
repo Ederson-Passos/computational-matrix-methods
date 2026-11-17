@@ -1,0 +1,9 @@
+\section{Conclusão}
+
+Foram implementados dois procedimentos numéricos para problemas de autovalores, utilizando as matrizes determinadas pela matrícula 318375. No primeiro problema, a redução de Hessenberg por reflexões de Householder, seguida de iterações QR com rotações de Givens, produziu a decomposição real de Schur de \(A_1\) em 68 iterações. Os autovalores obtidos foram \(26.68556904\), \(18.42664022\), \(2.88779074\) e \(34\). As verificações de ortogonalidade, reconstrução, traço e determinante apresentaram discrepâncias pequenas, compatíveis com a aritmética de ponto flutuante.
+
+A análise de sensibilidade mostrou que \(A_1\) é não normal e que seus autovalores possuem números de condição distintos. O autovalor \(26.68556904\) apresentou o maior número de condição, enquanto \(2.88779074\) apresentou o menor. Portanto, a sensibilidade não é uniforme no espectro e deve ser interpretada em conjunto com a geometria dos autovetores à direita e à esquerda.
+
+No segundo problema, o método da potência convergiu em 818 iterações para a tolerância \(10^{-8}\), produzindo a aproximação \(17.6085936704\). A convergência lenta é coerente com a proximidade, em módulo, dos dois autovalores dominantes. O pequeno resíduo do par próprio e a concordância com o espectro obtido por Schur sustentam a consistência do resultado.
+
+Conclui-se que os experimentos ilustram tanto a importância de explorar a estrutura matricial para obter algoritmos eficientes quanto a necessidade de avaliar a convergência e a sensibilidade dos resultados numéricos, em vez de considerar apenas os valores finais calculados.

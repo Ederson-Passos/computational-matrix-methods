@@ -1,0 +1,79 @@
+\section{Metodologia}
+
+\subsection{Construção das matrizes}
+
+As matrizes foram geradas diretamente a partir dos seis dígitos da matrícula, seguindo as fórmulas fornecidas no enunciado. A implementação utiliza vetores e matrizes em precisão de ponto flutuante de dupla precisão (\texttt{float} do NumPy). A geração é validada pelo requisito de que a entrada possua exatamente seis dígitos.
+
+\subsection{Redução à forma de Hessenberg}
+
+A matriz \(A_1\) não é Hessenberg superior, pois \(a_{31}=2\neq0\). Antes das iterações QR, aplica-se uma sequência de reflexões de Householder para construir uma matriz ortogonal \(U\) e uma matriz Hessenberg \(H\) satisfazendo
+\[
+H=U^TA_1U.
+\]
+Para um vetor \(x\), utiliza-se
+\[
+P=I-cvv^T,\qquad c=\frac{2}{v^Tv},
+\]
+com \(\alpha=-\operatorname{sign}(x_1)\|x\|_2\) e \(v=x-\alpha e_1\). A escolha do sinal reduz o risco de cancelamento numérico na formação de \(v\). As reflexões são aplicadas à esquerda e à direita nas submatrizes ativas, preservando os zeros já introduzidos.
+
+\subsection{Iteração QR com rotações de Givens}
+
+A partir de \(H\), aplica-se o passo QR por rotações de Givens. Para anular a segunda componente de \((a,b)^T\), define-se
+\[
+r=\sqrt{a^2+b^2},\qquad c=\frac{a}{r},\qquad s=\frac{b}{r},
+\]
+quando \(r\neq0\). A rotação correspondente é acumulada na matriz ortogonal. As transformações são aplicadas de modo a produzir uma sequência de similaridade, mantendo a estrutura de Hessenberg.
+
+A deflação é identificada quando uma entrada subdiagonal satisfaz
+\[
+|t_{j+1,j}|\leq \mathrm{tol}\,
+\bigl(|t_{j,j}|+|t_{j+1,j+1}|\bigr),
+\]
+com \(\mathrm{tol}=10^{-12}\). Nesse caso, a entrada é definida como zero. O procedimento é encerrado quando todas as entradas subdiagonais relevantes são anuladas. A matriz acumulada é \(Q\), e a matriz final é \(T\), de modo que \(A_1=QTQ^T\).
+
+Como \(T\) é triangular superior no caso obtido, seus elementos diagonais são os autovalores. A correção numérica da fatoração é examinada por
+\[
+\|Q^TQ-I\|_{\max},\qquad
+\|QTQ^T-A_1\|_{\max},
+\]
+e pela invariância do traço e do determinante.
+
+\subsection{Análise de sensibilidade}
+
+A matriz é classificada como não normal quando \(A_1^TA_1\neq A_1A_1^T\). Para autovalores simples, a sensibilidade de primeira ordem pode ser caracterizada pelo número de condição
+\[
+\kappa(\lambda_i)=
+\frac{\|x_i\|_2\|y_i\|_2}{|y_i^Tx_i|},
+\]
+em que \(x_i\) e \(y_i\) são, respectivamente, autovetores à direita e à esquerda. Na implementação, os vetores são normalizados de modo que \(\|x_i\|_2=1\) e \(y_i^Tx_i=1\), portanto \(\kappa(\lambda_i)=\|y_i\|_2\). O ângulo entre os vetores é calculado por
+\[
+\cos\theta_i=\frac{1}{\kappa(\lambda_i)}.
+\]
+Também se calcula a distância mínima entre cada autovalor e os demais para avaliar o isolamento espectral.
+
+\subsection{Método da potência}
+
+Para \(A_2\), seleciona-se
+\[
+x^{(0)}=(0,0,1,0,0)^T,
+\]
+e normaliza-se inicialmente \(q_0=x^{(0)}/\|x^{(0)}\|_2\). A cada iteração calcula-se
+\[
+z_k=A_2q_{k-1},\qquad
+q_k=\frac{z_k}{\|z_k\|_2}.
+\]
+Adota-se uma convenção de sinal na qual a primeira componente numericamente não nula de \(q_k\) é positiva. A aproximação do autovalor é obtida pelo quociente de Rayleigh:
+\[
+\lambda^{(k)}=
+\frac{q_k^TA_2q_k}{q_k^Tq_k}.
+\]
+O critério de parada é
+\[
+e_k=\frac{|\lambda^{(k)}-\lambda^{(k-1)}|}
+{|\lambda^{(k)}|}<10^{-8}.
+\]
+Foi estabelecido limite máximo de 2000 iterações. Ao final, calcula-se o resíduo do par próprio,
+\[
+r=A_2q_k-\lambda^{(k)}q_k,
+\]
+e sua norma euclidiana.

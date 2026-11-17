@@ -1,0 +1,138 @@
+\section{Resultados e discussões}
+
+\subsection{Decomposição real de Schur: Problemas 1a e 1b}
+
+A redução de Hessenberg remove a entrada \(a_{31}\) que impede a aplicação direta do QR estruturado. Em seguida, o algoritmo QR com rotações de Givens convergiu em 68 iterações para a matriz triangular superior \(T\). As matrizes obtidas, apresentadas com seis casas decimais, são
+\[
+Q=\begin{bmatrix}
+0.414938&0.901657&-0.121827&0\\
+0.908765&-0.417248&0.007119&0\\
+0.044413&0.113666&0.992526&0\\
+0&0&0&1
+\end{bmatrix},
+\quad
+T=\begin{bmatrix}
+26.685569&13.918567&20.622186&21.667775\\
+0&18.426640&34.438335&23.695891\\
+0&0&2.887791&27.550178\\
+0&0&0&34
+\end{bmatrix}.
+\]
+A quarta linha de \(A_1\) já apresenta desacoplamento, de modo que \(\lambda=34\) é identificável diretamente. A transformação de similaridade preserva essa estrutura.
+
+Os autovalores extraídos da diagonal de \(T\) são
+\[
+\boxed{\lambda(A_1)=
+\{26.68556904,\;18.42664022,\;2.88779074,\;34.00000000\}.}
+\]
+As verificações numéricas apresentaram
+\[
+\|Q^TQ-I\|_{\max}=1.89\times10^{-15},\qquad
+\|QTQ^T-A_1\|_{\max}=3.19\times10^{-11}.
+\]
+Além disso, \(\operatorname{tr}(A_1)=82\), igual à soma dos autovalores. O determinante da submatriz \(3\times3\) superior esquerda é \(1420\), e, pelo desacoplamento da quarta linha,
+\[
+\det(A_1)=34(1420)=48280.
+\]
+O produto dos autovalores calculado numericamente foi \(48280.00000017\), com erro relativo \(3.59\times10^{-12}\). Essas verificações são consistentes com a fatoração calculada.
+
+\subsection{Sensibilidade do problema de autovalor: Problema 1c}
+
+Obteve-se
+\[
+\|A_1^TA_1-A_1A_1^T\|_{\max}=2294,
+\]
+confirmando que \(A_1\) não é normal. A Tabela~\ref{tab:sensibilidade} reúne os números de condição, os ângulos entre autovetores à direita e à esquerda e a distância mínima entre autovalores.
+
+\begin{table}[H]
+\centering
+\caption{Indicadores de sensibilidade dos autovalores de \(A_1\).}
+\label{tab:sensibilidade}
+\begin{tabular}{ccrr}
+\toprule
+Autovalor & Valor & \(\kappa(\lambda_i)\) & \(\theta_i\) (graus)\\
+\midrule
+\(\lambda_1\)&26.68556904&21.222548&87.2992\\
+\(\lambda_2\)&18.42664022&11.680828&85.0889\\
+\(\lambda_3\)&2.88779074&3.298015&72.3493\\
+\(\lambda_4\)&34.00000000&12.642448&85.4632\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+O maior número de condição corresponde a \(\lambda_1\), indicando que esse autovalor é o mais sensível a perturbações na matriz. O menor valor corresponde a \(\lambda_3\), que é o menos sensível entre os quatro. Os ângulos elevados entre os autovetores à direita e à esquerda são compatíveis com a não normalidade observada. Isso não significa, por si só, que o problema seja numericamente instável em qualquer sentido; indica que a resposta espectral a perturbações pode ser amplificada de maneira dependente do autovalor.
+
+As distâncias mínimas entre cada autovalor e os demais foram, respectivamente, \(7.314431\), \(8.258929\), \(15.538849\) e \(7.314431\). Os autovalores são distintos e não há autovalores repetidos no espectro calculado. O isolamento espectral reduz a possibilidade de forte interação entre autovalores próximos, embora a não normalidade e os números de condição continuem relevantes para a sensibilidade.
+
+\subsection{Método da potência: Problemas 2a e 2b}
+
+Para a matriz \(A_2\), o vetor inicial escolhido foi o terceiro vetor canônico. Com tolerância \(10^{-8}\), o método da potência atingiu o critério de parada na iteração 818. A aproximação final foi
+\[
+\boxed{\lambda_{\mathrm{dom}}\approx17.6085936704,}
+\]
+com autovetor unitário aproximado
+\[
+q\approx
+\begin{bmatrix}
+0.011131&-0.436725&-0.843412&-0.197199&0.242727
+\end{bmatrix}^{T}.
+\]
+A Figura~\ref{fig:convergencia} apresenta a evolução da aproximação do autovalor, enquanto a Figura~\ref{fig:erro} mostra a redução do erro relativo. A tabela completa das 818 iterações é disponibilizada no arquivo \texttt{iteracoes\_metodo\_potencia.csv}, gerado a partir do histórico do algoritmo. A Tabela~\ref{tab:iteracoes} apresenta pontos representativos do histórico, incluindo as primeiras iterações e a aproximação final.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.82\textwidth]{convergencia_autovalor.pdf}
+\caption{Evolução da aproximação do autovalor pelo método da potência.}
+\label{fig:convergencia}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.82\textwidth]{erro_relativo.pdf}
+\caption{Erro relativo entre aproximações sucessivas. A linha tracejada indica a tolerância \(10^{-8}\).}
+\label{fig:erro}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Iterações representativas do método da potência.}
+\label{tab:iteracoes}
+\small
+\begin{tabular}{rrr}
+\toprule
+\(k\)&\(\lambda^{(k)}\)&Erro relativo\\
+\midrule
+1&16.1243781095&\(7.713669\times10^{-3}\)\\
+2&18.1077301884&\(1.095307\times10^{-1}\)\\
+3&16.4090371438&\(1.035218\times10^{-1}\)\\
+4&18.1057255953&\(9.371005\times10^{-2}\)\\
+5&16.4449141090&\(1.009924\times10^{-1}\)\\
+10&18.1037271546&\(8.701489\times10^{-2}\)\\
+100&17.7339974022&\(1.520477\times10^{-2}\)\\
+200&17.6267635035&\(2.099761\times10^{-3}\)\\
+400&17.6089389139&\(3.962154\times10^{-5}\)\\
+600&17.6086000961&\(7.470061\times10^{-7}\)\\
+800&17.6085937073&\(1.408348\times10^{-8}\)\\
+818&17.6085936704&\(9.851328\times10^{-9}\)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+As aproximações iniciais apresentam oscilações e o erro relativo não é monotônico nas primeiras iterações. Após esse regime transitório, a sequência estabiliza progressivamente em torno do autovalor dominante. O espectro de \(A_2\), calculado adicionalmente pela implementação de Schur, foi
+\[
+\begin{aligned}
+\lambda_1&=17.6085935846,\\
+\lambda_2&=-17.2624168135,\\
+\lambda_{3,4}&=-9.3667339631\pm2.1095526385i,\\
+\lambda_5&=-0.6127088449.
+\end{aligned}
+\]
+Assim, \(|\lambda_1|=17.60859358\) é ligeiramente maior que \(|\lambda_2|=17.26241681\). A razão entre os módulos dos dois maiores autovalores é próxima de \(0.980\), o que explica a convergência relativamente lenta: a componente associada ao segundo autovalor decai aproximadamente segundo essa razão a cada iteração.
+
+A verificação do par próprio forneceu
+\[
+\|q\|_2=1,\qquad
+\|A_2q-\lambda_{\mathrm{dom}}q\|_2
+=3.49\times10^{-7},
+\]
+e resíduo máximo de \(3.07\times10^{-7}\). O autovalor obtido pelo método da potência também coincide, nas casas apresentadas, com o autovalor dominante extraído da decomposição de Schur independente. Isso fornece uma verificação cruzada dos dois procedimentos.

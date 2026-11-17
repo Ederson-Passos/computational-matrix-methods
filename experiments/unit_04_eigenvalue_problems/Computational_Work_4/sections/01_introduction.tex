@@ -1,0 +1,13 @@
+\section{Introdução}
+
+O cálculo de autovalores constitui uma tarefa central da álgebra linear numérica, com aplicações em estabilidade de sistemas dinâmicos, análise modal, solução de equações diferenciais e métodos iterativos. Em aritmética finita, entretanto, a obtenção do espectro não depende apenas de uma caracterização algébrica: a escolha do algoritmo, a estrutura da matriz e o condicionamento do problema influenciam a estabilidade e a confiabilidade dos resultados.
+
+A decomposição real de Schur fornece uma representação ortogonalmente semelhante à matriz original. Para \(A\in\mathbb{R}^{n\times n}\), procura-se
+\[
+A=QTQ^T,\qquad Q^TQ=I,
+\]
+em que \(T\) é quase triangular superior. Como transformações de similaridade preservam o espectro, os autovalores podem ser extraídos dos blocos diagonais de \(T\). Uma implementação eficiente para matrizes densas reduz inicialmente \(A\) à forma de Hessenberg e, em seguida, aplica iterações QR estruturadas \cite{golubvanloan,trefethenbau}.
+
+O método da potência, por sua vez, é um procedimento iterativo para aproximar o autovalor de maior módulo e seu autovetor associado. Sua convergência depende da existência de um autovalor dominante isolado e de uma componente inicial não nula na direção do respectivo autovetor. A normalização a cada iteração evita o crescimento ou o decaimento excessivo dos vetores \cite{saad}.
+
+O objetivo deste trabalho é implementar e avaliar esses procedimentos em duas matrizes determinadas pela matrícula 318375. No Problema 1, constrói-se a decomposição real de Schur, extraem-se os autovalores e discute-se a sensibilidade. No Problema 2, emprega-se o método da potência e acompanha-se a convergência por meio do erro relativo entre aproximações sucessivas. A implementação foi desenvolvida em Python/NumPy, com as etapas algorítmicas explicitadas no apêndice e no repositório indicado.

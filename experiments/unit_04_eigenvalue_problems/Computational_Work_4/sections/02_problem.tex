@@ -1,0 +1,34 @@
+\section{Problema}
+
+Seja a matrícula \(m=d_1d_2d_3d_4d_5d_6=318375\). Logo,
+\[
+(d_1,d_2,d_3,d_4,d_5,d_6)=(3,1,8,3,7,5).
+\]
+A substituição desses dígitos nas expressões do enunciado resulta nas matrizes
+\[
+A_1=\begin{bmatrix}
+20&1&42&27\\
+14&20&6&10\\
+2&0&8&31\\
+0&0&0&34
+\end{bmatrix},\qquad
+A_2=\begin{bmatrix}
+-8&-1&0&2&1\\
+-7&-2&9&7&2\\
+4&3&16&-2&-2\\
+-7&3&4&-9&-2\\
+0&-2&-7&-7&-16
+\end{bmatrix}.
+\]
+
+\subsection{Problema 1: decomposição de Schur e sensibilidade}
+
+Para \(A_1\), deseja-se determinar \(Q\) e \(T\), com \(Q\) ortogonal e \(T\) real quase triangular superior, tais que
+\[
+A_1=QTQ^T.
+\]
+Em seguida, devem-se obter os autovalores de \(A_1\) a partir dos blocos diagonais de \(T\) e discutir a sensibilidade do problema de autovalor.
+
+\subsection{Problema 2: autovalor dominante}
+
+Para \(A_2\), deseja-se aproximar o autovalor dominante, isto é, o autovalor de maior módulo, pelo método da potência. O vetor inicial deve ser escolhido de modo adequado, e a iteração deve ser encerrada quando o erro relativo entre duas aproximações sucessivas do autovalor satisfizer a tolerância especificada. Deve-se também apresentar a evolução das aproximações e dos erros ao longo das iterações.
