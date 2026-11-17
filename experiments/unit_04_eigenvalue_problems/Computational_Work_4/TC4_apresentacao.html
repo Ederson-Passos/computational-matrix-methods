@@ -56,6 +56,37 @@
       padding: 0 3.2rem;
     }
 
+    /* Links clicáveis para o repositório GitHub */
+    a.repo-link {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--accent-primary);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--accent-primary);
+      transition: color 0.15s ease, background-color 0.15s ease;
+      padding: 0.05rem 0.2rem;
+      border-radius: 2px;
+    }
+
+    a.repo-link:hover {
+      background-color: var(--accent-soft);
+      border-bottom-style: solid;
+    }
+
+    .source-caption {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.55rem;
+      padding-top: 0.4rem;
+      border-top: 1px dashed var(--rule-light);
+      font-family: var(--font-sans);
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+    }
+
     /* ==========================================================================
        2. CABEÇALHO ACADÊMICO E BARRA DE PROGRESSO DISCRETA
        ========================================================================== */
@@ -278,6 +309,8 @@
       justify-content: space-between;
       border-bottom: 1px solid var(--rule-light);
       padding-bottom: 0.35rem;
+      gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .block-title-tag {
@@ -535,7 +568,7 @@
       background: var(--bg-surface);
       border: 1px solid var(--rule-light);
       border-top: 3px solid var(--rule-heavy);
-      padding: 2.6rem 3.4rem;
+      padding: 2.4rem 3.2rem;
     }
 
     .cover-institution {
@@ -544,44 +577,44 @@
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--ink-secondary);
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.3rem;
       border-bottom: 1px solid var(--rule-light);
-      padding-bottom: 1rem;
+      padding-bottom: 0.9rem;
     }
 
     .cover-title {
       text-align: center;
-      font-size: 2.25rem;
+      font-size: 2.2rem;
       font-weight: 700;
       line-height: 1.22;
       color: var(--ink-primary);
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.1rem;
     }
 
     .cover-authors {
       text-align: center;
-      font-size: 1.08rem;
-      margin-bottom: 1.6rem;
+      font-size: 1.05rem;
+      margin-bottom: 1.4rem;
       color: var(--ink-primary);
     }
 
     .cover-abstract-box {
       max-width: 780px;
-      margin: 0 auto 1.6rem;
-      padding: 1.1rem 1.6rem;
+      margin: 0 auto 1.4rem;
+      padding: 1rem 1.5rem;
       background-color: var(--bg-paper);
       border-top: 1px solid var(--rule-mid);
       border-bottom: 1px solid var(--rule-mid);
-      font-size: 0.92rem;
+      font-size: 0.91rem;
     }
 
     .cover-abstract-title {
       text-align: center;
       font-weight: 700;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
     }
 
     .kpi-strip {
@@ -785,7 +818,13 @@
 
           <div class="cover-authors">
             <strong>Éderson Passos Silva</strong><br />
-            <span class="m-num">Matrícula: m = d₁d₂d₃d₄d₅d₆ = 318375</span> · Trabalho Computacional 4 (TC4)
+            <span class="m-num">Matrícula: m = d₁d₂d₃d₄d₅d₆ = 318375</span> · Trabalho Computacional 4 (TC4)<br />
+            <span style="font-size:0.84rem; color:var(--ink-secondary);">
+              Repositório do Notebook:
+              <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+                github.com/Ederson-Passos/computational-matrix-methods/.../problem_1_2.ipynb ↗
+              </a>
+            </span>
           </div>
 
           <div class="cover-abstract-box">
@@ -941,6 +980,12 @@
                    [-7, 3, 4, -6 - d4, -2],
                    [0, -2, -7, -7, -9 - d5]], dtype=<span class="kw">float</span>)
     <span class="kw">return</span> A1, A2</pre>
+            <div class="source-caption">
+              <span>Código-fonte: Célula 1 (STEP 0: Generation of Matrix)</span>
+              <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+                Ver código completo em problem_1_2.ipynb no GitHub ↗
+              </a>
+            </div>
           </div>
         </details>
       </section>
@@ -1037,7 +1082,7 @@
         </div>
 
         <details class="expand-panel">
-          <summary><span>Inspecionar matrizes intermediárias da Redução de Hessenberg (H e U) e erros de similaridade</span><span>[+]</span></summary>
+          <summary><span>Inspecionar matrizes intermediárias da Redução de Hessenberg (H e U), código e erros de similaridade</span><span>[+]</span></summary>
           <div class="expand-body">
             <div style="display:flex; justify-content:space-around; align-items:center; flex-wrap:wrap; gap:1rem;">
               <div>
@@ -1066,6 +1111,12 @@
                 Erro de Ortogonalidade: ‖UᵀU − I‖<sub>∞</sub> = 8.31 × 10⁻¹⁸<br />
                 Erro de Reconstrução: &nbsp;&nbsp;‖UHUᵀ − A₁‖<sub>∞</sub> = 1.78 × 10⁻¹⁵
               </div>
+            </div>
+            <div class="source-caption">
+              <span>Funções no notebook: <code>house()</code>, <code>hessenberg_reduction()</code>, <code>givens()</code> e <code>schur_real_decomposition()</code></span>
+              <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+                Abrir implementação no GitHub (problem_1_2.ipynb) ↗
+              </a>
             </div>
           </div>
         </details>
@@ -1123,6 +1174,13 @@
               <span class="equation-boxed m-num">
                 λ(A₁) = { 26.68556904, &nbsp;18.42664022, &nbsp;2.88779074, &nbsp;34.00000000 }
               </span>
+            </div>
+
+            <div class="source-caption">
+              <span>Resultados extraídos de <code>Q_schur</code>, <code>T_schur</code> e <code>autovalores_A1</code> (Células 23–26)</span>
+              <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+                Conferir resultados no GitHub (problem_1_2.ipynb) ↗
+              </a>
             </div>
           </div>
 
@@ -1193,6 +1251,13 @@
                 </tr>
               </tbody>
             </table>
+
+            <div class="source-caption">
+              <span>Tabela de verificação de invariantes</span>
+              <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+                Repositório GitHub ↗
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -1306,6 +1371,13 @@
                 <text x="105" y="105" font-family="monospace" font-size="11.5" fill="#161618">3.30 (θ = 72.35°)</text>
               </svg>
             </div>
+
+            <div class="source-caption">
+              <span>Fonte: <code>autovetores_via_schur()</code> e <code>analisar_sensibilidade_A1()</code> (Células 27–28)</span>
+              <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+                Ver tabela e código em problem_1_2.ipynb no GitHub ↗
+              </a>
+            </div>
           </div>
 
           <div class="col-5 paper-block">
@@ -1356,6 +1428,12 @@
                   </table>
                 </div>
               </div>
+            </div>
+            <div class="source-caption">
+              <span>Autovetores calculados por substituição regressiva em T e progressiva em Tᵀ</span>
+              <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+                Abrir notebook no GitHub ↗
+              </a>
             </div>
           </div>
         </details>
@@ -1454,11 +1532,18 @@
 
     <span class="kw">return</span> lambda_atual, q_k, historico</pre>
 
-            <div style="margin-top:0.75rem; padding:0.65rem 0.9rem; background:var(--bg-subtle); border-left:3px solid var(--accent-secondary); font-size:0.86rem;">
+            <div style="margin-top:0.65rem; padding:0.6rem 0.85rem; background:var(--bg-subtle); border-left:3px solid var(--accent-secondary); font-size:0.85rem;">
               <strong>Distinção Metodológica:</strong> A razão
               <span class="m-num">|λ<sup>(k)</sup> − λ<sup>(k−1)</sup>| / |λ<sup>(k)</sup>| &lt; tol</span> é um <em>critério de parada por estagnação sucessiva</em>.
               A validação matemática da convergência real ao auto-par é atestada complementarmente pelo resíduo
               ‖<span class="m-it">A</span><sub>2</sub><span class="m-it">q<sub>k</sub></span> − λ<sub>1</sub><span class="m-it">q<sub>k</sub></span>‖<sub>2</sub> e pelo confronto com o espectro de Schur de <span class="m-it">A</span><sub>2</sub>.
+            </div>
+
+            <div class="source-caption">
+              <span>Código-fonte: Célula 35 (STEP 3: Método da Potência)</span>
+              <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+                Ver código completo em problem_1_2.ipynb no GitHub ↗
+              </a>
             </div>
           </div>
         </div>
@@ -1544,6 +1629,12 @@
           Como a taxa de amortecimento do erro no Método da Potência é governada por
           <span class="m-num">|λ₂ / λ₁| = 17.26241681 / 17.60859358 ≈ 0.980340</span> (muito próxima de 1) e <span class="m-num">λ₂ &lt; 0</span> tem sinal oposto a <span class="m-num">λ₁ &gt; 0</span>,
           a componente subdominante decai lentamente como <span class="m-num">(−0.980340)<sup>k</sup></span>, aproximando <span class="m-num">λ₁</span> por cima nas iterações pares e por baixo nas ímpares.
+          <div class="source-caption">
+            <span>Fonte dos dados e gráficos: <code>tabela_potencia_granulada</code> e <code>visualizar_convergencia_potencia()</code> (Células 37–43)</span>
+            <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+              Ver resultados e gráficos em problem_1_2.ipynb no GitHub ↗
+            </a>
+          </div>
         </div>
 
         <details class="expand-panel">
@@ -1570,6 +1661,12 @@
                 </thead>
                 <tbody id="iterationTableBody"></tbody>
               </table>
+            </div>
+            <div class="source-caption">
+              <span>Tabela iterativa gerada por <code>imprimir_tabela_potencia()</code> / <code>extrair_tabela_granulada()</code></span>
+              <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+                Acessar código e tabela no GitHub (problem_1_2.ipynb) ↗
+              </a>
             </div>
           </div>
         </details>
@@ -1657,6 +1754,13 @@
               <span>Resíduo Máximo: ‖A₂q − λ₁q‖<sub>∞</sub> = <strong>3.07 × 10⁻⁷</strong></span>
               <span> |λ₁<sup>(Potência)</sup> − λ₁<sup>(Schur)</sup>| = <strong>8.58 × 10⁻⁸</strong></span>
             </div>
+
+            <div class="source-caption">
+              <span>Verificação direta da equação de autovalor (Célula 41)</span>
+              <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+                Ver script de verificação em problem_1_2.ipynb no GitHub ↗
+              </a>
+            </div>
           </div>
 
           <!-- SÍNTESE CONCLUSIVA -->
@@ -1683,11 +1787,17 @@
           </div>
         </div>
 
-        <!-- QUADRO FINAL DE ENCERRAMENTO ACADÊMICO -->
-        <div class="paper-block" style="margin-top:0.95rem; text-align:center; padding:0.8rem 1.2rem; background:var(--bg-subtle);">
+        <!-- QUADRO FINAL DE ENCERRAMENTO ACADÊMICO COM LINK PARA O GITHUB -->
+        <div class="paper-block" style="margin-top:0.95rem; text-align:center; padding:0.85rem 1.2rem; background:var(--bg-subtle);">
           <span style="font-weight:700; color:var(--ink-primary);">Trabalho Computacional 4 — Métodos Matriciais Computacionais (PPGMAP / UFRGS)</span>
-          <span style="display:block; font-size:0.84rem; color:var(--ink-secondary); margin-top:0.15rem;">
+          <span style="display:block; font-size:0.84rem; color:var(--ink-secondary); margin-top:0.18rem;">
             Autor: Éderson Passos Silva (Matrícula 318375) · Docente: Prof.ª Dr.ª Cibele Aparecida Ladeia · Referências: Golub &amp; Van Loan (2013); Trefethen &amp; Bau (1997); Saad (2011).
+          </span>
+          <span style="display:block; margin-top:0.35rem;">
+            Repositório Completo do Notebook no GitHub:
+            <a class="repo-link" style="font-size:0.8rem; font-weight:600;" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+              https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb ↗
+            </a>
           </span>
         </div>
       </section>
@@ -1715,7 +1825,11 @@
         <kbd>Esc</kbd> Fechar painéis
       </div>
       <div>
-        Arquivo HTML 100% autônomo (<span class="m-num">file://</span> offline) · Estética LaTeX &amp; Edward Tufte
+        Código e experimentos:
+        <a class="repo-link" href="https://github.com/Ederson-Passos/computational-matrix-methods/blob/main/experiments/unit_04_eigenvalue_problems/Computational_Work_4/scripts/problem_1_2.ipynb" target="_blank" rel="noopener noreferrer">
+          GitHub: problem_1_2.ipynb ↗
+        </a>
+        &nbsp;·&nbsp; HTML autônomo (<span class="m-num">file://</span> offline)
       </div>
     </footer>
   </div>
